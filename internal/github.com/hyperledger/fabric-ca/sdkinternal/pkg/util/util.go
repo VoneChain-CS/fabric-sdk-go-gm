@@ -23,11 +23,11 @@ package util
 import (
 	"bytes"
 	"crypto/ecdsa"
-	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"github.com/tjfoc/gmsm/sm2"
 	"io/ioutil"
 	"math/big"
 	mrand "math/rand"
@@ -215,13 +215,13 @@ func HTTPResponseToString(resp *http.Response) string {
 		resp.StatusCode, resp.Status, string(body))
 }
 
-// GetX509CertificateFromPEM get an X509 certificate from bytes in PEM format
-func GetX509CertificateFromPEM(cert []byte) (*x509.Certificate, error) {
+// Getsm2CertificateFromPEM get an sm2 certificate from bytes in PEM format
+func GetX509CertificateFromPEM(cert []byte) (*sm2.Certificate, error) {
 	block, _ := pem.Decode(cert)
 	if block == nil {
 		return nil, errors.New("Failed to PEM decode certificate")
 	}
-	x509Cert, err := x509.ParseCertificate(block.Bytes)
+	x509Cert, err := sm2.ParseCertificate(block.Bytes)
 	if err != nil {
 		return nil, errors.Wrap(err, "Error parsing certificate")
 	}
@@ -237,8 +237,8 @@ func GetEnrollmentIDFromPEM(cert []byte) (string, error) {
 	return GetEnrollmentIDFromX509Certificate(x509Cert), nil
 }
 
-// GetEnrollmentIDFromX509Certificate returns the EnrollmentID from the X509 certificate
-func GetEnrollmentIDFromX509Certificate(cert *x509.Certificate) string {
+// GetEnrollmentIDFromsm2Certificate returns the EnrollmentID from the sm2 certificate
+func GetEnrollmentIDFromX509Certificate(cert *sm2.Certificate) string {
 	return cert.Subject.CommonName
 }
 
@@ -315,4 +315,3 @@ func GetMaskedURL(url string) string {
 	}
 	return url
 }
-

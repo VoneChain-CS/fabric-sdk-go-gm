@@ -11,8 +11,8 @@ Please review third_party pinning scripts and patches for more details.
 package x509
 
 import (
-	"crypto/x509"
 	"fmt"
+	"github.com/tjfoc/gmsm/sm2"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
 
@@ -30,7 +30,7 @@ func NewSigner(key core.Key, cert []byte) (*Signer, error) {
 	var err error
 	s.cert, err = util.GetX509CertificateFromPEM(s.certBytes)
 	if err != nil {
-		return nil, errors.WithMessage(err, "Failed to unmarshal X509 certificate bytes")
+		return nil, errors.WithMessage(err, "Failed to unmarshal sm2 certificate bytes")
 	}
 	s.name = util.GetEnrollmentIDFromX509Certificate(s.cert)
 	return s, nil
@@ -44,7 +44,7 @@ type Signer struct {
 	// Certificate bytes
 	certBytes []byte
 	// X509 certificate that is constructed from the cert bytes associated with this signer
-	cert *x509.Certificate
+	cert *sm2.Certificate
 	// Common name from the certificate associated with this signer
 	name string
 }
@@ -59,8 +59,8 @@ func (s *Signer) Cert() []byte {
 	return s.certBytes
 }
 
-// GetX509Cert returns the X509 certificate for this signer
-func (s *Signer) GetX509Cert() *x509.Certificate {
+// Getsm2Cert returns the sm2 certificate for this signer
+func (s *Signer) GetX509Cert() *sm2.Certificate {
 	return s.cert
 }
 

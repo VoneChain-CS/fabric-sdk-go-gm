@@ -21,8 +21,8 @@ Please review third_party pinning scripts and patches for more details.
 package tls
 
 import (
-	"crypto/tls"
-	"crypto/x509"
+	"github.com/tjfoc/gmsm/sm2"
+	tls "github.com/tjfoc/gmtls"
 	"time"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
@@ -48,7 +48,7 @@ type ClientTLSConfig struct {
 	Enabled     bool     `skip:"true"`
 	CertFiles   [][]byte `help:"A list of comma-separated PEM-encoded trusted certificate bytes"`
 	Client      KeyCertFiles
-	TlsCertPool *x509.CertPool
+	TlsCertPool *sm2.CertPool
 }
 
 // KeyCertFiles defines the files need for client on TLS
@@ -70,7 +70,6 @@ func GetClientTLSConfig(cfg *ClientTLSConfig, csp core.CryptoSuite) (*tls.Config
 		if err != nil {
 			return nil, err
 		}
-
 		clientCert, err := util.LoadX509KeyPair(cfg.Client.CertFile, cfg.Client.KeyFile, csp)
 		if err != nil {
 			return nil, err
@@ -82,10 +81,10 @@ func GetClientTLSConfig(cfg *ClientTLSConfig, csp core.CryptoSuite) (*tls.Config
 	}
 	rootCAPool := cfg.TlsCertPool
 	if rootCAPool == nil {
-		rootCAPool, err := x509.SystemCertPool()
+		rootCAPool, err := sm2.SystemCertPool()
 		if err != nil {
 			log.Debugf("Failed to load system cert pool, switching to empty cert pool ")
-			rootCAPool = x509.NewCertPool()
+			rootCAPool = sm2.NewCertPool()
 		}
 
 		if len(cfg.CertFiles) == 0 {

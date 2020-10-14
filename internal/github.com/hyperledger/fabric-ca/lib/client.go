@@ -150,7 +150,7 @@ func (c *Client) initHTTPClient(serverName string) error {
 		//set the host name override
 		tlsConfig.ServerName = serverName
 
-		tr.TLSClientConfig = tlsConfig
+		//tr.TLSClientConfig = tlsConfig
 	}
 	c.httpClient = &http.Client{Transport: tr}
 	return nil
@@ -257,6 +257,16 @@ func (c *Client) net2LocalCAInfo(net *api.CAInfoResponseNet, local *GetCAInfoRes
 }
 
 func (c *Client) handleX509Enroll(req *api.EnrollmentRequest) (*EnrollmentResponse, error) {
+	if req.CSR == nil {
+		req.CSR = &api.CSRInfo{}
+	}
+	names := req.CSR.Names
+	if names == nil {
+		names = []csr.Name{}
+	}
+	// Add an OU field with the type
+	names = append(names, csr.Name{OU: "admin"})
+	req.CSR.Names = names
 	// Generate the CSR
 	csrPEM, key, err := c.GenCSR(req.CSR, req.Name)
 	if err != nil {

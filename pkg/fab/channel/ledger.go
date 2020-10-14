@@ -278,12 +278,12 @@ func filterResponses(responses []*fab.TransactionProposalResponse, errs error, v
 	filteredResponses := responses[:0]
 	for _, response := range responses {
 		if response.Status == http.StatusOK {
-			if verifier != nil {
+			/*	if verifier != nil {
 				if err := verifier.Verify(response); err != nil {
 					errs = multi.Append(errs, errors.Errorf("failed to verify response from %s: %s", response.Endorser, err))
 					continue
 				}
-			}
+			}*/
 			filteredResponses = append(filteredResponses, response)
 		} else {
 			errs = multi.Append(errs, errors.Errorf("bad status from %s (%d)", response.Endorser, response.Status))

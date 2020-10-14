@@ -325,10 +325,6 @@ github.com/hashicorp/hcl/hcl/token
 github.com/hashicorp/hcl/json/parser
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
-# github.com/hyperledger/fabric v2.1.1+incompatible
-## explicit
-# github.com/hyperledger/fabric-ca v1.4.8
-## explicit
 # github.com/hyperledger/fabric-config v0.0.5
 ## explicit
 github.com/hyperledger/fabric-config/protolator
@@ -452,16 +448,14 @@ github.com/stretchr/testify/assert
 github.com/stretchr/testify/require
 # github.com/subosito/gotenv v1.2.0
 github.com/subosito/gotenv
-# github.com/sykesm/zap-logfmt v0.0.4
-## explicit
 # github.com/timakin/bodyclose v0.0.0-20190721030226-87058b9bfcec
 github.com/timakin/bodyclose/passes/bodyclose
-# github.com/tjfoc/gmsm v1.3.2
+# github.com/tjfoc/gmsm v1.3.2 => ./tjfoc/gmsm
 ## explicit
 github.com/tjfoc/gmsm/sm2
 github.com/tjfoc/gmsm/sm3
 github.com/tjfoc/gmsm/sm4
-# github.com/tjfoc/gmtls v1.2.1
+# github.com/tjfoc/gmtls v1.2.1 => ./tjfoc/gmtls
 ## explicit
 github.com/tjfoc/gmtls
 github.com/tjfoc/gmtls/gmcredentials
@@ -495,6 +489,7 @@ go.uber.org/multierr
 # go.uber.org/tools v0.0.0-20190618225709-2cfd321de3ee
 go.uber.org/tools/update-license
 # go.uber.org/zap v1.12.0
+## explicit
 go.uber.org/zap
 go.uber.org/zap/buffer
 go.uber.org/zap/internal/bufferpool
@@ -684,9 +679,7 @@ mvdan.cc/lint
 mvdan.cc/unparam/check
 # sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4
 sourcegraph.com/sqs/pbtypes
-# github.com/cloudflare/cfssl => ./cfssl
 # github.com/Shopify/sarama => ./Shopify/sarama
-# github.com/spf13/cast => ./spf13/cast
 # github.com/spf13/cobra => ./spf13/cobra
 # github.com/spf13/jwalterweatherman => ./spf13/jwalterweatherman
 # github.com/spf13/pflag => ./spf13/pflag

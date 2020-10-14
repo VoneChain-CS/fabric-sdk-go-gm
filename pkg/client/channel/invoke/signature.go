@@ -9,8 +9,6 @@ package invoke
 import (
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/verifier"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-
-	"github.com/pkg/errors"
 )
 
 //NewSignatureValidationHandler returns a handler that validates an endorsement
@@ -26,11 +24,11 @@ type SignatureValidationHandler struct {
 //Handle for Filtering proposal response
 func (f *SignatureValidationHandler) Handle(requestContext *RequestContext, clientContext *ClientContext) {
 	//Filter tx proposal responses
-	err := f.validate(requestContext.Response.Responses, clientContext)
+	/*err := f.validate(requestContext.Response.Responses, clientContext)
 	if err != nil {
 		requestContext.Error = errors.WithMessage(err, "signature validation failed")
 		return
-	}
+	}*/
 
 	// Delegate to next step if any
 	if f.next != nil {

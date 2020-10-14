@@ -10,24 +10,24 @@ Please review third_party pinning scripts and patches for more details.
 
 /*
  * The attrmgr package contains utilities for managing attributes.
- * Attributes are added to an X509 certificate as an extension.
+ * Attributes are added to an sm2 certificate as an extension.
  */
 
 package attrmgr
 
 import (
-	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/json"
 	"fmt"
+	"github.com/tjfoc/gmsm/sm2"
 
 	"github.com/pkg/errors"
 )
 
 var (
 	// AttrOID is the ASN.1 object identifier for an attribute extension in an
-	// X509 certificate
+	// sm2 certificate
 	AttrOID = asn1.ObjectIdentifier{1, 2, 3, 4, 5, 6, 7, 8, 1}
 	// AttrOIDString is the string version of AttrOID
 	AttrOIDString = "1.2.3.4.5.6.7.8.1"
@@ -55,9 +55,9 @@ func New() *Mgr { return &Mgr{} }
 // Mgr is the attribute manager and is the main object for this package
 type Mgr struct{}
 
-// ProcessAttributeRequestsForCert add attributes to an X509 certificate, given
+// ProcessAttributeRequestsForCert add attributes to an sm2 certificate, given
 // attribute requests and attributes.
-func (mgr *Mgr) ProcessAttributeRequestsForCert(requests []AttributeRequest, attributes []Attribute, cert *x509.Certificate) error {
+func (mgr *Mgr) ProcessAttributeRequestsForCert(requests []AttributeRequest, attributes []Attribute, cert *sm2.Certificate) error {
 	attrs, err := mgr.ProcessAttributeRequests(requests, attributes)
 	if err != nil {
 		return err
@@ -93,8 +93,8 @@ func (mgr *Mgr) ProcessAttributeRequests(requests []AttributeRequest, attributes
 	return attrs, nil
 }
 
-// AddAttributesToCert adds public attribute info to an X509 certificate.
-func (mgr *Mgr) AddAttributesToCert(attrs *Attributes, cert *x509.Certificate) error {
+// AddAttributesToCert adds public attribute info to an sm2 certificate.
+func (mgr *Mgr) AddAttributesToCert(attrs *Attributes, cert *sm2.Certificate) error {
 	buf, err := json.Marshal(attrs)
 	if err != nil {
 		return errors.Wrap(err, "Failed to marshal attributes")
@@ -109,7 +109,7 @@ func (mgr *Mgr) AddAttributesToCert(attrs *Attributes, cert *x509.Certificate) e
 }
 
 // GetAttributesFromCert gets the attributes from a certificate.
-func (mgr *Mgr) GetAttributesFromCert(cert *x509.Certificate) (*Attributes, error) {
+func (mgr *Mgr) GetAttributesFromCert(cert *sm2.Certificate) (*Attributes, error) {
 	// Get certificate attributes from the certificate if it exists
 	buf, err := getAttributesFromCert(cert)
 	if err != nil {
@@ -171,7 +171,7 @@ func (a *Attributes) True(name string) error {
 }
 
 // Get the attribute info from a certificate extension, or return nil if not found
-func getAttributesFromCert(cert *x509.Certificate) ([]byte, error) {
+func getAttributesFromCert(cert *sm2.Certificate) ([]byte, error) {
 	for _, ext := range cert.Extensions {
 		if isAttrOID(ext.Id) {
 			return ext.Value, nil

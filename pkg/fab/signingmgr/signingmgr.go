@@ -25,7 +25,7 @@ type SigningManager struct {
 // @param {Config} config - configuration provider
 // @returns {SigningManager} new signing manager
 func New(cryptoProvider core.CryptoSuite) (*SigningManager, error) {
-	return &SigningManager{cryptoProvider: cryptoProvider, hashOpts: cryptosuite.GetSHAOpts()}, nil
+	return &SigningManager{cryptoProvider: cryptoProvider, hashOpts: cryptosuite.GetGMSM3Opts()}, nil
 }
 
 // Sign will sign the given object using provided key
@@ -39,11 +39,11 @@ func (mgr *SigningManager) Sign(object []byte, key core.Key) ([]byte, error) {
 		return nil, errors.New("key (for signing) required")
 	}
 
-	digest, err := mgr.cryptoProvider.Hash(object, mgr.hashOpts)
-	if err != nil {
+	//digest, err := mgr.cryptoProvider.Hash(object, mgr.hashOpts)
+	/*if err != nil {
 		return nil, err
-	}
-	signature, err := mgr.cryptoProvider.Sign(key, digest, mgr.signerOpts)
+	}*/
+	signature, err := mgr.cryptoProvider.Sign(key, object, mgr.signerOpts)
 	if err != nil {
 		return nil, err
 	}
