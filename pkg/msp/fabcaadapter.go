@@ -627,11 +627,11 @@ func createFabricCAClient(caID string, cryptoSuite core.CryptoSuite, config msp.
 	}
 
 	var err error
-/*	certPool, err := config.TLSCACertPool().Get()
+	certPool, err := config.TLSCACertPool().Get()
 	if err != nil {
 		return nil, errors.Wrap(err, "couldn't load configured cert pool")
 	}
-	c.Config.TLS.TlsCertPool =certPool ;*/
+	c.Config.TLS.TlsCertPool = certPool
 	//TLS flag enabled/disabled
 	c.Config.TLS.Enabled = endpoint.IsTLSEnabled(conf.URL)
 	c.Config.MSPDir = config.CAKeyStorePath()
@@ -646,4 +646,3 @@ func createFabricCAClient(caID string, cryptoSuite core.CryptoSuite, config msp.
 
 	return c, nil
 }
-

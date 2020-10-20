@@ -14,17 +14,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/hyperledger/fabric-sdk-go/http"
+	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
 	"io/ioutil"
 	"net"
-	"net/http"
 	"net/url"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
-
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
 
 	cfsslapi "github.com/cloudflare/cfssl/api"
 	"github.com/cloudflare/cfssl/csr"
@@ -149,8 +148,7 @@ func (c *Client) initHTTPClient(serverName string) error {
 		tlsConfig.CipherSuites = tls.DefaultCipherSuites
 		//set the host name override
 		tlsConfig.ServerName = serverName
-
-		//tr.TLSClientConfig = tlsConfig
+		tr.TLSClientConfig = tlsConfig
 	}
 	c.httpClient = &http.Client{Transport: tr}
 	return nil

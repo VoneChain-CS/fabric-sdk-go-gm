@@ -59,9 +59,9 @@ client:
     # [Optional]. Client key and cert for TLS handshake with peers and orderers
     client:
       key:
-        path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/client.key
+        path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.key
       cert:
-        path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/client.crt
+        path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.crt
 
 #
 # [Optional]. But most apps would have this section so that channel objects can be constructed
@@ -174,38 +174,6 @@ channels:
         # Default: 5s
         peerMonitorPeriod: 6s
 
-  # multi-org test channel
-  orgchannel:
-
-    orderers:
-      - orderer.example.com
-
-    peers:
-      peer0.org1.example.com:
-        endorsingPeer: true
-        chaincodeQuery: true
-        ledgerQuery: true
-        eventSource: true
-
-      peer0.org2.example.com:
-        endorsingPeer: true
-        chaincodeQuery: true
-        ledgerQuery: true
-        eventSource: true
-
-  # sample channel with channel matcher (sample*channel will return ch1 config where * can be any word or '')
-  ch1:
-
-    orderers:
-      - orderer.example.com
-
-    peers:
-      peer0.org2.example.com:
-        endorsingPeer: true
-        chaincodeQuery: true
-        ledgerQuery: true
-        eventSource: true
-
 #
 # list of participating organizations in this network
 #
@@ -226,6 +194,7 @@ organizations:
     # Fabric-CA servers.
     certificateAuthorities:
       - ca.org1.example.com
+      - tlsca.org1.example.com
 
   # the profile will contain public information about organizations other than the one it belongs to.
   # These are necessary information to make transaction lifecycles work, including MSP IDs and
@@ -341,13 +310,13 @@ certificateAuthorities:
       ssl-target-name-override: ca.org1.example.com
     tlsCACerts:
       # Comma-Separated list of paths
-      path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/ca.crt
+      path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem
       # Client key and cert for SSL handshake with Fabric CA
       client:
         key:
-          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/client.key
+          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.key
         cert:
-          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/client.crt
+          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.crt
 
 
     # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
@@ -365,13 +334,13 @@ certificateAuthorities:
       ssl-target-name-override: ca.org2.example.com
     tlsCACerts:
       # Comma-Separated list of paths
-      path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/ca.crt
+      path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org2.example.com/ca/ca.org2.example.com-cert.pem
       # Client key and cert for SSL handshake with Fabric CA
       client:
         key:
-          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/client.key
+          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org2.example.com/users/User1@org2.example.com/tls/client.key
         cert:
-          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/ordererOrganizations/example.com/users/Admin@example.com/tls/client.crt
+          path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org2.example.com/users/User1@org2.example.com/tls/client.crt
 
       # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
       # needed to enroll and invoke new users.

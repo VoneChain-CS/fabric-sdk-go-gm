@@ -35,7 +35,7 @@ import (
 	factory "github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric-ca/sdkpatch/cryptosuitebridge"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
 
-	"net/http"
+	"github.com/hyperledger/fabric-sdk-go/http"
 	"os"
 	"path"
 	"path/filepath"

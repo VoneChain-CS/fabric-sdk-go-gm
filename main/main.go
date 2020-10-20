@@ -96,6 +96,25 @@ func enrollUser(sdk *fabsdk.FabricSDK) {
 	}
 }
 
+func registerUser(sdk *fabsdk.FabricSDK) {
+
+	ctxProvider := sdk.Context()
+
+	// Get the Client.
+	// Without WithOrg option, it uses default client organization.
+	msp1, err := msp.New(ctxProvider)
+	if err != nil {
+		fmt.Printf("failed to create CA client: %s", err)
+	}
+
+	request := &msp.RegistrationRequest{Name: "testuser", Secret: "testuserpw", Type: "client", Affiliation: "org1.department1"}
+	_, err = msp1.Register(request)
+	if err != nil {
+		fmt.Printf("Register return error %s", err)
+	}
+
+}
+
 func queryChannelConfig(ledgerClient *ledger.Client) {
 	resp1, err := ledgerClient.QueryConfig()
 	if err != nil {
@@ -171,6 +190,7 @@ func main() {
 	defer sdk.Close()
 
 	setupLogLevel()
+	//registerUser(sdk)
 	enrollUser(sdk)
 
 	clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user))

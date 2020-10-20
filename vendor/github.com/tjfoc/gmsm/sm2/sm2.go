@@ -262,10 +262,11 @@ func Verify(pub *PublicKey, hash []byte, r, s *big.Int) bool {
 	e := new(big.Int).SetBytes(hash)
 	x.Add(x, e)
 	x.Mod(x, N)
-	return x.Cmp(r)==0
+	return x.Cmp(r) == 0
 }
 
 func Sm2Sign(priv *PrivateKey, msg, uid []byte) (r, s *big.Int, err error) {
+	/*	fmt.Print("msg++++,%v",msg)*/
 	za, err := ZA(&priv.PublicKey, uid)
 	if err != nil {
 		return nil, nil, err
@@ -311,6 +312,7 @@ func Sm2Sign(priv *PrivateKey, msg, uid []byte) (r, s *big.Int, err error) {
 }
 
 func Sm2Verify(pub *PublicKey, msg, uid []byte, r, s *big.Int) bool {
+	/*	fmt.Printf("msg------,%v",msg)*/
 	c := pub.Curve
 	N := c.Params().N
 	one := new(big.Int).SetInt64(1)

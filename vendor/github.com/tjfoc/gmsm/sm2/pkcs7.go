@@ -51,8 +51,8 @@ var (
 	oidAttributeContentType   = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 3}
 	oidAttributeMessageDigest = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 4}
 	oidAttributeSigningTime   = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 5}
-    oidSM3withSM2=asn1.ObjectIdentifier{1, 2, 156, 10197, 1, 501}
-	oidDSASM2 = asn1.ObjectIdentifier{1, 2, 156, 10197, 1, 301, 1}
+	oidSM3withSM2             = asn1.ObjectIdentifier{1, 2, 156, 10197, 1, 501}
+	oidDSASM2                 = asn1.ObjectIdentifier{1, 2, 156, 10197, 1, 301, 1}
 )
 
 type signedData struct {

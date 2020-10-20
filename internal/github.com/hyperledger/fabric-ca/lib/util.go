@@ -18,9 +18,9 @@ import (
 	"fmt"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/grantae/certinfo"
+	"github.com/hyperledger/fabric-sdk-go/http"
 	tls "github.com/tjfoc/gmtls"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -145,13 +145,11 @@ func getMaxEnrollments(userMaxEnrollments int, caMaxEnrollments int) (int, error
 	}
 }
 
-
 func addQueryParm(req *http.Request, name, value string) {
 	url := req.URL.Query()
 	url.Add(name, value)
 	req.URL.RawQuery = url.Encode()
 }
-
 
 // CertificateDecoder is needed to keep track of state, to see how many certificates
 // have been returned for each enrollment ID.
@@ -159,7 +157,6 @@ type CertificateDecoder struct {
 	certIDCount map[string]int
 	storePath   string
 }
-
 
 type certPEM struct {
 	PEM string `db:"pem"`
@@ -228,11 +225,10 @@ func (cd *CertificateDecoder) StoreCert(enrollmentID, storePath string, cert []b
 	return nil
 }
 
-
 // SM2证书请求 转换 X509 证书请求
 func ParseSm2CertificateRequest2X509(sm2req *sm2.CertificateRequest) *x509.CertificateRequest {
 	x509req := &x509.CertificateRequest{
-		Raw: sm2req.Raw, // Complete ASN.1 DER content (CSR, signature algorithm and signature).
+		Raw:                      sm2req.Raw,                      // Complete ASN.1 DER content (CSR, signature algorithm and signature).
 		RawTBSCertificateRequest: sm2req.RawTBSCertificateRequest, // Certificate request info part of raw ASN.1 DER content.
 		RawSubjectPublicKeyInfo:  sm2req.RawSubjectPublicKeyInfo,  // DER encoded SubjectPublicKeyInfo.
 		RawSubject:               sm2req.RawSubject,               // DER encoded Subject.

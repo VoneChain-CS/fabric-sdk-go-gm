@@ -12,7 +12,7 @@ package x509
 
 import (
 	"encoding/hex"
-	"net/http"
+	"github.com/hyperledger/fabric-sdk-go/http"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
 

@@ -557,6 +557,8 @@ type RecordHeaderError struct {
 	// RecordHeader contains the five bytes of TLS record header that
 	// triggered the error.
 	RecordHeader [5]byte
+
+	Conn net.Conn
 }
 
 func (e RecordHeaderError) Error() string { return "tls: " + e.Msg }
