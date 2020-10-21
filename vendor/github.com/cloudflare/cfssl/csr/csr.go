@@ -3,7 +3,6 @@ package csr
 
 import (
 	"crypto"
-	"reflect"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
@@ -15,12 +14,12 @@ import (
 	"errors"
 	"net"
 	"net/mail"
+	"net/url"
 	"strings"
 
 	cferr "github.com/cloudflare/cfssl/errors"
 	"github.com/cloudflare/cfssl/helpers"
 	"github.com/cloudflare/cfssl/log"
-	"github.com/tjfoc/gmsm/sm2"
 )
 
 const (
@@ -47,7 +46,7 @@ type KeyRequest struct {
 
 // NewKeyRequest returns a default KeyRequest.
 func NewKeyRequest() *KeyRequest {
-	return &KeyRequest{"gmsm2", curveP256}
+	return &KeyRequest{"ecdsa", curveP256}
 }
 
 // Algo returns the requested key algorithm represented as a string.
@@ -86,8 +85,6 @@ func (kr *KeyRequest) Generate() (crypto.PrivateKey, error) {
 			return nil, errors.New("invalid curve")
 		}
 		return ecdsa.GenerateKey(curve, rand.Reader)
-	case "gmsm2":
-		return sm2.GenerateKey()
 	default:
 		return nil, errors.New("invalid algorithm")
 	}
@@ -363,15 +360,14 @@ func Regenerate(priv crypto.Signer, csr []byte) ([]byte, error) {
 // Generate creates a new CSR from a CertificateRequest structure and
 // an existing key. The KeyRequest field is ignored.
 func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err error) {
-	log.Infof("type---%v",reflect.TypeOf(priv.Public()))
-	/*sigAlgo := helpers.SignerAlgo(priv)
+	sigAlgo := helpers.SignerAlgo(priv)
 	if sigAlgo == x509.UnknownSignatureAlgorithm {
 		return nil, cferr.New(cferr.PrivateKeyError, cferr.Unavailable)
-	}*/
+	}
 
-	var tpl = sm2.CertificateRequest{
+	var tpl = x509.CertificateRequest{
 		Subject:            req.Name(),
-		SignatureAlgorithm: sm2.SM2WithSM3,
+		SignatureAlgorithm: sigAlgo,
 	}
 
 	for i := range req.Hosts {
@@ -379,6 +375,8 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 			tpl.IPAddresses = append(tpl.IPAddresses, ip)
 		} else if email, err := mail.ParseAddress(req.Hosts[i]); err == nil && email != nil {
 			tpl.EmailAddresses = append(tpl.EmailAddresses, email.Address)
+		} else if uri, err := url.ParseRequestURI(req.Hosts[i]); err == nil && uri != nil {
+			tpl.URIs = append(tpl.URIs, uri)
 		} else {
 			tpl.DNSNames = append(tpl.DNSNames, req.Hosts[i])
 		}
@@ -392,7 +390,7 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 		}
 	}
 
-	csr, err = sm2.CreateCertificateRequest(rand.Reader, &tpl, priv)
+	csr, err = x509.CreateCertificateRequest(rand.Reader, &tpl, priv)
 	if err != nil {
 		log.Errorf("failed to generate a CSR: %v", err)
 		err = cferr.Wrap(cferr.CSRError, cferr.BadRequest, err)
@@ -409,7 +407,7 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 }
 
 // appendCAInfoToCSR appends CAConfig BasicConstraint extension to a CSR
-func appendCAInfoToCSR(reqConf *CAConfig, csr *sm2.CertificateRequest) error {
+func appendCAInfoToCSR(reqConf *CAConfig, csr *x509.CertificateRequest) error {
 	pathlen := reqConf.PathLength
 	if pathlen == 0 && !reqConf.PathLenZero {
 		pathlen = -1

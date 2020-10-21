@@ -52,7 +52,7 @@ import (
 	"encoding/asn1"
 	"errors"
 
-	cferr "github.com/cloudflare/cfssl/errors"
+	cferr "github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/errors"
 )
 
 // Types used for asn1 Unmarshaling.

@@ -26,10 +26,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cfssl/crypto/pkcs7"
-	cferr "github.com/cloudflare/cfssl/errors"
-	"github.com/cloudflare/cfssl/helpers/derhelpers"
-	"github.com/cloudflare/cfssl/log"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/crypto/pkcs7"
+	cferr "github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/errors"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/helpers/derhelpers"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/log"
 	"golang.org/x/crypto/pkcs12"
 )
 

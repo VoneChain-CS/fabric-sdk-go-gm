@@ -3,7 +3,6 @@ package csr
 
 import (
 	"crypto"
-	"reflect"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
@@ -15,11 +14,12 @@ import (
 	"errors"
 	"net"
 	"net/mail"
+	"reflect"
 	"strings"
 
-	cferr "github.com/cloudflare/cfssl/errors"
-	"github.com/cloudflare/cfssl/helpers"
-	"github.com/cloudflare/cfssl/log"
+	cferr "github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/errors"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/helpers"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/log"
 	"github.com/tjfoc/gmsm/sm2"
 )
 
@@ -135,12 +135,12 @@ type CAConfig struct {
 // A CertificateRequest encapsulates the API interface to the
 // certificate request functionality.
 type CertificateRequest struct {
-	CN           string     `json:"CN" yaml:"CN"`
-	Names        []Name     `json:"names" yaml:"names"`
-	Hosts        []string   `json:"hosts" yaml:"hosts"`
+	CN           string      `json:"CN" yaml:"CN"`
+	Names        []Name      `json:"names" yaml:"names"`
+	Hosts        []string    `json:"hosts" yaml:"hosts"`
 	KeyRequest   *KeyRequest `json:"key,omitempty" yaml:"key,omitempty"`
-	CA           *CAConfig  `json:"ca,omitempty" yaml:"ca,omitempty"`
-	SerialNumber string     `json:"serialnumber,omitempty" yaml:"serialnumber,omitempty"`
+	CA           *CAConfig   `json:"ca,omitempty" yaml:"ca,omitempty"`
+	SerialNumber string      `json:"serialnumber,omitempty" yaml:"serialnumber,omitempty"`
 }
 
 // New returns a new, empty CertificateRequest with a
@@ -363,7 +363,7 @@ func Regenerate(priv crypto.Signer, csr []byte) ([]byte, error) {
 // Generate creates a new CSR from a CertificateRequest structure and
 // an existing key. The KeyRequest field is ignored.
 func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err error) {
-	log.Infof("type---%v",reflect.TypeOf(priv.Public()))
+	log.Infof("type---%v", reflect.TypeOf(priv.Public()))
 	/*sigAlgo := helpers.SignerAlgo(priv)
 	if sigAlgo == x509.UnknownSignatureAlgorithm {
 		return nil, cferr.New(cferr.PrivateKeyError, cferr.Unavailable)

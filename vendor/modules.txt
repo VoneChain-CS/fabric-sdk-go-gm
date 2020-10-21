@@ -11,7 +11,7 @@ github.com/OpenPeeDeeP/depguard
 github.com/beorn7/perks/quantile
 # github.com/bgentry/speakeasy v0.1.0
 github.com/bgentry/speakeasy
-# github.com/cloudflare/cfssl v1.4.1 => ./cfssl
+# github.com/cloudflare/cfssl v1.4.1
 ## explicit
 github.com/cloudflare/cfssl/api
 github.com/cloudflare/cfssl/auth
@@ -465,7 +465,7 @@ github.com/tmc/grpc-websocket-proxy/wsproxy
 github.com/ultraware/funlen
 # github.com/urfave/cli v1.20.0
 github.com/urfave/cli
-# github.com/weppos/publicsuffix-go v0.4.0
+# github.com/weppos/publicsuffix-go v0.5.0
 github.com/weppos/publicsuffix-go/publicsuffix
 # github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2
 github.com/xiang90/probing
@@ -679,6 +679,7 @@ mvdan.cc/lint
 mvdan.cc/unparam/check
 # sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4
 sourcegraph.com/sqs/pbtypes
+# github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl v0.0.0-20201021101014-9a2abd087e1c => ./cfssl
 # github.com/spf13/cobra => ./spf13/cobra
 # github.com/spf13/jwalterweatherman => ./spf13/jwalterweatherman
 # github.com/spf13/pflag => ./spf13/pflag
