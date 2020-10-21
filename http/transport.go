@@ -16,7 +16,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/hyperledger/fabric-sdk-go/http/httptrace"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/http/httptrace"
 	tls "github.com/tjfoc/gmtls"
 	httpguts "golang.org/x/net/http/httpguts"
 	"io"
@@ -30,7 +30,6 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
-
 )
 
 // DefaultTransport is the default implementation of Transport and is

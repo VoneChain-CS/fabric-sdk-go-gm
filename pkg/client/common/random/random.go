@@ -9,7 +9,7 @@ package random
 import (
 	"math/rand"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 )
 
 //PickRandomNPeerConfigs picks N random  unique peer configs from given channel peer list

@@ -7,7 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 package mocks
 
 import (
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
 )
 
 // MockSigningManager is mock signing manager

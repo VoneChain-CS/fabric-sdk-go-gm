@@ -7,9 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 package dispatcher
 
 import (
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
 )
 
 // Event is an event that's sent to the dispatcher. This includes client registration

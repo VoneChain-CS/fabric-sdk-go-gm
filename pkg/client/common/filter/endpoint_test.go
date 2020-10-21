@@ -8,7 +8,7 @@ package filter
 import (
 	"testing"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/mocks"
 )
 
 const channelID = "mychannel"

@@ -14,15 +14,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/selection/balancer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/selection/options"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/selection/sorter/blockheightsorter"
-	contextAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	fab "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/discovery"
-	discmocks "github.com/hyperledger/fabric-sdk-go/pkg/fab/discovery/mocks"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
-	mspmocks "github.com/hyperledger/fabric-sdk-go/pkg/msp/test/mockmsp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/selection/balancer"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/selection/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/selection/sorter/blockheightsorter"
+	contextAPI "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	fab "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/discovery"
+	discmocks "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/discovery/mocks"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/mocks"
+	mspmocks "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/msp/test/mockmsp"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -269,7 +269,7 @@ func TestSelection(t *testing.T) {
 	t.Run("Fatal Error Access denied on all peers", func(t *testing.T) {
 		discClient.SetResponses(
 			&discovery.MockDiscoverEndpointResponse{
-				AccessDenied: true,
+				AccessDenied:  true,
 				PeerEndpoints: []*discmocks.MockDiscoveryPeerEndpoint{},
 			},
 		)

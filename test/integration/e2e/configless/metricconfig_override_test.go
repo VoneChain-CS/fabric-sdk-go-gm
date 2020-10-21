@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package configless
 
-import "github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/metrics/cfg"
+import "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk/metrics/cfg"
 
 // metricconfig_override_test.go is an example of programmatically configuring the sdk by injecting instances that implement Metricsonfig's functions (representing the sdk's configs)
 // for the sake of overriding MetricsConfig integration tests, the structure variables below set the metrics to disabled as the standarad build does not use metrics.

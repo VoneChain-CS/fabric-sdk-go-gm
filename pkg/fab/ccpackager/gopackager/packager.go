@@ -16,8 +16,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/resource"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/resource"
 	"github.com/pkg/errors"
 
 	"fmt"

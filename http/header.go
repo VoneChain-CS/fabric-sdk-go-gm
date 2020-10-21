@@ -5,8 +5,8 @@
 package http
 
 import (
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/http/httptrace"
 	"io"
-	"github.com/hyperledger/fabric-sdk-go/http/httptrace"
 	"net/textproto"
 	"sort"
 	"strings"

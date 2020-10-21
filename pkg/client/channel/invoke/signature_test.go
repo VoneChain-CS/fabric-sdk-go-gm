@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	txnmocks "github.com/hyperledger/fabric-sdk-go/pkg/client/common/mocks"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/status"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	fcmocks "github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
+	txnmocks "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/mocks"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/status"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	fcmocks "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/mocks"
 	"github.com/stretchr/testify/assert"
 )
 

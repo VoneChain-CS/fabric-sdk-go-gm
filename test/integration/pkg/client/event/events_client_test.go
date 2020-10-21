@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/event"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/events/deliverclient/seek"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
-	"github.com/hyperledger/fabric-sdk-go/test/integration"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/event"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/deliverclient/seek"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/integration"
 )
 
 func TestDefaultEventClient(t *testing.T) {

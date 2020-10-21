@@ -11,7 +11,7 @@ github.com/OpenPeeDeeP/depguard
 github.com/beorn7/perks/quantile
 # github.com/bgentry/speakeasy v0.1.0
 github.com/bgentry/speakeasy
-# github.com/cloudflare/cfssl v0.0.0-00010101000000-000000000000 => ./cfssl
+# github.com/cloudflare/cfssl v1.4.1 => ./cfssl
 ## explicit
 github.com/cloudflare/cfssl/api
 github.com/cloudflare/cfssl/auth
@@ -679,7 +679,6 @@ mvdan.cc/lint
 mvdan.cc/unparam/check
 # sourcegraph.com/sqs/pbtypes v0.0.0-20180604144634-d3ebe8f20ae4
 sourcegraph.com/sqs/pbtypes
-# github.com/Shopify/sarama => ./Shopify/sarama
 # github.com/spf13/cobra => ./spf13/cobra
 # github.com/spf13/jwalterweatherman => ./spf13/jwalterweatherman
 # github.com/spf13/pflag => ./spf13/pflag

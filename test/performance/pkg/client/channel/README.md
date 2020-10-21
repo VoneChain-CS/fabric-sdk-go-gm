@@ -17,7 +17,7 @@
 	    * the command output also shows the environment and the package used for the benchmark exection:
 	        goos: darwin
             goarch: amd64
-            pkg: github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel
+            pkg: github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel
             
         UPDATE: there are now 2 benchmarks in this file, the first being the original one which runs with sequential executions and the second makes use of
         parallel client executions to simulate simultanous calls from the client (command line outputs below are updated to reflect these two calls). 
@@ -43,57 +43,57 @@
     $ go test -tags pprof -run=notest -bench=Call*
     goos: darwin
     goarch: amd64
-    pkg: github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel
+    pkg: github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel
     BenchmarkCallExecuteTx-8           	    1000	   1261314 ns/op	  208093 B/op	    3037 allocs/op
     BenchmarkCallQuery-8               	    2000	    975568 ns/op	  154871 B/op	    2429 allocs/op
     BenchmarkCallExecuteTxParallel-8   	    3000	    444365 ns/op	  208302 B/op	    3019 allocs/op
     BenchmarkCallQueryTxParallel-8     	    5000	    319143 ns/op	  154845 B/op	    2424 allocs/op
     PASS
-    ok  	github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel	6.618s
+    ok  	github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel	6.618s
 
     $ go test -tags pprof -run=notest -bench=Call* -benchtime=10s
     goos: darwin
     goarch: amd64
-    pkg: github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel
+    pkg: github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel
     BenchmarkCallExecuteTx-8           	   10000	   1319398 ns/op	  208059 B/op	    3038 allocs/op
     BenchmarkCallQuery-8               	   10000	   1024998 ns/op	  154866 B/op	    2429 allocs/op
     BenchmarkCallExecuteTxParallel-8   	   30000	    564144 ns/op	  208060 B/op	    3015 allocs/op
     BenchmarkCallQueryTxParallel-8     	   50000	    386486 ns/op	  154849 B/op	    2424 allocs/op
     PASS
-    ok  	github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel	68.788s
+    ok  	github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel	68.788s
     
     $ go test -tags pprof -run=notest -bench=Call* -benchtime=30s
     goos: darwin
     goarch: amd64
-    pkg: github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel
+    pkg: github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel
     BenchmarkCallExecuteTx-8           	   30000	   1295530 ns/op	  208024 B/op	    3038 allocs/op
     BenchmarkCallQuery-8               	   50000	   1027276 ns/op	  154858 B/op	    2429 allocs/op
     BenchmarkCallExecuteTxParallel-8   	  100000	    529863 ns/op	  208115 B/op	    3016 allocs/op
     BenchmarkCallQueryTxParallel-8     	  100000	    380491 ns/op	  154854 B/op	    2424 allocs/op
     PASS
-    ok  	github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel	213.246s
+    ok  	github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel	213.246s
 
     $ go test -tags pprof -run=notest -bench=Call* -benchtime=60s
     goos: darwin
     goarch: amd64
-    pkg: github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel
+    pkg: github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel
     BenchmarkCallExecuteTx-8           	  100000	   1304653 ns/op	  208043 B/op	    3038 allocs/op
     BenchmarkCallQuery-8               	  100000	    988127 ns/op	  154850 B/op	    2429 allocs/op
     BenchmarkCallExecuteTxParallel-8   	  200000	    500477 ns/op	  208150 B/op	    3017 allocs/op
     BenchmarkCallQueryTxParallel-8     	  200000	    360922 ns/op	  154797 B/op	    2424 allocs/op
     PASS
-    ok  	github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel	433.668s
+    ok  	github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel	433.668s
 
     $ go test -tags pprof -run=notest -bench=Call* -benchtime=120s -timeout 30m
     goos: darwin
     goarch: amd64
-    pkg: github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel
+    pkg: github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel
     BenchmarkCallExecuteTx-8           	  200000	   1286497 ns/op	  208050 B/op	    3038 allocs/op
     BenchmarkCallQuery-8               	  200000	    991448 ns/op	  154846 B/op	    2429 allocs/op
     BenchmarkCallExecuteTxParallel-8   	  500000	    510610 ns/op	  208140 B/op	    3017 allocs/op
     BenchmarkCallQueryTxParallel-8     	  500000	    365202 ns/op	  154773 B/op	    2424 allocs/op
     PASS
-    ok  	github.com/hyperledger/fabric-sdk-go/test/performance/pkg/client/channel	926.270s
+    ok  	github.com/VoneChain-CS/fabric-sdk-go-gm/test/performance/pkg/client/channel	926.270s
     
 ###Benchmark data (using Prometheus report)
     The Channel Client's Execute and Query functions have been amended to collect metric counts and time spent executing these functions.
@@ -119,9 +119,9 @@
     
     If you would like to collect perf data into your version of Prometheus server (example dedicated performance environment),
     make sure to create new metrics instances and register them the same way as in the channel client package.
-    ie look at: "github.com/hyperledger/fabric-sdk-go/pkg/client/channel/chclientrun.go" to see how ClientMetrics is created and 
+    ie look at: "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel/chclientrun.go" to see how ClientMetrics is created and 
     metrics added in the code. 
-    "github.com/hyperledger/fabric-sdk-go/pkg/client/channel/metrics.go" creates metrics structures to be used in the file above.
+    "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel/metrics.go" creates metrics structures to be used in the file above.
     
     currently, only channel client is configured with performance metrics (and operations system like Fabric).
     To setup data collection in your client application, see this file for more details: 

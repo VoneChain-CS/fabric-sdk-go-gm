@@ -13,10 +13,10 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
 )
 
 var logModules = [...]string{"fabsdk", "fabsdk/client", "fabsdk/core", "fabsdk/fab", "fabsdk/common",

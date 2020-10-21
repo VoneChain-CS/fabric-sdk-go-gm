@@ -17,15 +17,15 @@ import (
 	lb "github.com/hyperledger/fabric-protos-go/peer/lifecycle"
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/multi"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	contextImpl "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	lifecyclepkg "github.com/hyperledger/fabric-sdk-go/pkg/fab/ccpackager/lifecycle"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/peer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/resource"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/txn"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/multi"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	contextImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	lifecyclepkg "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/ccpackager/lifecycle"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/peer"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/resource"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/txn"
 )
 
 //go:generate counterfeiter -o mocklifecycleresource.gen.go -fake-name MockLifecycleResource . lifecycleResource

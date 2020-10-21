@@ -11,14 +11,14 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/status"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/integration"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/metadata"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/third_party/github.com/hyperledger/fabric/common/policydsl"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/resmgmt"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/status"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
-	"github.com/hyperledger/fabric-sdk-go/test/integration"
-	"github.com/hyperledger/fabric-sdk-go/test/metadata"
-	"github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/common/policydsl"
 	"github.com/stretchr/testify/require"
 )
 

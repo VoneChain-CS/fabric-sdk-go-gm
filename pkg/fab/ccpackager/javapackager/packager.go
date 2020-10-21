@@ -17,9 +17,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/resource"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/resource"
 	"github.com/pkg/errors"
 )
 

@@ -9,10 +9,10 @@ package mocks
 import (
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	contextImpl "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/txn"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	contextImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/txn"
 	"github.com/pkg/errors"
 )
 

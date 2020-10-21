@@ -7,12 +7,12 @@ SPDX-License-Identifier: Apache-2.0
 package mockfab
 
 import (
-	tls "github.com/tjfoc/gmtls"
 	"github.com/tjfoc/gmsm/sm2"
+	tls "github.com/tjfoc/gmtls"
 	"time"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 	"github.com/golang/mock/gomock"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
 	"github.com/pkg/errors"
 )
 

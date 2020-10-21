@@ -17,7 +17,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
 )
 
 // bccspCryptoSigner is the BCCSP-based implementation of a crypto.Signer

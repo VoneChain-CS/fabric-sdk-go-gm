@@ -9,16 +9,16 @@ package invoke
 import (
 	"bytes"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/status"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/status"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
 	"github.com/pkg/errors"
 
+	selectopts "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/selection/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/peer"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/txn"
 	"github.com/hyperledger/fabric-protos-go/common"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	selectopts "github.com/hyperledger/fabric-sdk-go/pkg/client/common/selection/options"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/peer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/txn"
 )
 
 // TxnHeaderOptsProvider provides transaction header options which allow

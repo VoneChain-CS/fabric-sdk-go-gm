@@ -9,8 +9,8 @@ package configless
 import (
 	"testing"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
-	"github.com/hyperledger/fabric-sdk-go/test/integration/e2e"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/integration/e2e"
 )
 
 // this test mimics the original e2e test with the difference of injecting interface functions implementations

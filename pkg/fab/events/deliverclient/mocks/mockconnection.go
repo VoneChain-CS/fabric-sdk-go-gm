@@ -9,11 +9,11 @@ package mocks
 import (
 	"time"
 
+	clientmocks "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/client/mocks"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/deliverclient/connection"
 	cb "github.com/hyperledger/fabric-protos-go/common"
 	ab "github.com/hyperledger/fabric-protos-go/orderer"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	clientmocks "github.com/hyperledger/fabric-sdk-go/pkg/fab/events/client/mocks"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/events/deliverclient/connection"
 	"github.com/pkg/errors"
 )
 

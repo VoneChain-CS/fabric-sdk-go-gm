@@ -15,9 +15,9 @@ package logging
 import (
 	"sync"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/logging/api"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/logging/metadata"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/logging/modlog"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/api"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/metadata"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/modlog"
 )
 
 //Logger basic implementation of api.Logger interface

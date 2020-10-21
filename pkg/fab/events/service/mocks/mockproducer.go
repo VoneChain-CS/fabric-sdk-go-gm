@@ -11,8 +11,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/test"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/hyperledger/fabric-sdk-go/pkg/util/test"
 )
 
 // Ledger is a MockLedger

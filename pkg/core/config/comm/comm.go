@@ -7,11 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 package comm
 
 import (
-	tls "github.com/tjfoc/gmtls"
 	"github.com/tjfoc/gmsm/sm2"
+	tls "github.com/tjfoc/gmtls"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/cryptosuite"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/cryptosuite"
 	"github.com/pkg/errors"
 )
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package event
 
-import "github.com/hyperledger/fabric-sdk-go/pkg/fab/events/deliverclient/seek"
+import "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/deliverclient/seek"
 
 // ClientOption describes a functional parameter for the New constructor
 type ClientOption func(*Client) error

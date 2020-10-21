@@ -12,16 +12,16 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/verifier"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/options"
-	fabcontext "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config/comm"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config/endpoint"
-	"google.golang.org/grpc"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/verifier"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
+	fabcontext "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config/comm"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config/endpoint"
 	credentials "github.com/tjfoc/gmtls/gmcredentials"
+	"google.golang.org/grpc"
 )
 
 var logger = logging.NewLogger("fabsdk/fab")

@@ -3,13 +3,13 @@ package main
 import (
 	"crypto/ecdsa"
 	"fmt"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/resmgmt"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/ledger"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
 	"github.com/tjfoc/gmsm/sm2"
 	"io/ioutil"
 	"log"
@@ -154,10 +154,10 @@ func readInput() {
 }
 
 func main1() {
-	cert, err := sm2.ReadCertificateFromPem("/opt/goworkspace/src/github.com/hyperledger/fabric-sdk-go/main/cert.pem")
-	cert1, err := sm2.ReadCertificateFromPem("/opt/goworkspace/src/github.com/hyperledger/fabric-sdk-go/main/cert1.pem")
+	cert, err := sm2.ReadCertificateFromPem("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/cert.pem")
+	cert1, err := sm2.ReadCertificateFromPem("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/cert1.pem")
 	log.Printf("cert---,%v", cert)
-	bytes, _ := ioutil.ReadFile("/opt/goworkspace/src/github.com/hyperledger/fabric-sdk-go/main/cert.pem")
+	bytes, _ := ioutil.ReadFile("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/cert.pem")
 	log.Printf("cert---,%v", bytes)
 	if err != nil {
 		fmt.Printf("failed to read cert file")
@@ -181,7 +181,7 @@ func main() {
 	channelName = "mychannel"
 	cc = "mycc"
 	fmt.Println("Reading connection profile..")
-	c := config.FromFile("/opt/goworkspace/src/github.com/hyperledger/fabric-sdk-go/main/config_test.yaml")
+	c := config.FromFile("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/config_test.yaml")
 	sdk, err := fabsdk.New(c)
 	if err != nil {
 		fmt.Printf("Failed to create new SDK: %s\n", err)

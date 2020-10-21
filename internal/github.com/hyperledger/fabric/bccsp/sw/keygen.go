@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"github.com/tjfoc/gmsm/sm2"
 
-	"github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/bccsp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/bccsp"
 )
 
 type ecdsaKeyGenerator struct {
@@ -63,7 +63,7 @@ func (gm *gmsm4KeyGenerator) KeyGen(opts bccsp.KeyGenOpts) (bccsp.Key, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Failed generating SM4 key for [%v]: [%s]", err)
 	}
-	return &gmsm4PrivateKey{lowLevelKey,false}, nil
+	return &gmsm4PrivateKey{lowLevelKey, false}, nil
 }
 
 type aesKeyGenerator struct {

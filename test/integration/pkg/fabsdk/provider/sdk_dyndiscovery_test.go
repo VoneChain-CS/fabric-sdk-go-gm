@@ -11,14 +11,14 @@ package provider
 import (
 	"testing"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/discovery/dynamicdiscovery"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/options"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	contextImpl "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/factory/defsvc"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/provider/chpvdr"
-	"github.com/hyperledger/fabric-sdk-go/test/integration"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/discovery/dynamicdiscovery"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	contextImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk/factory/defsvc"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk/provider/chpvdr"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/integration"
 	"github.com/stretchr/testify/require"
 )
 

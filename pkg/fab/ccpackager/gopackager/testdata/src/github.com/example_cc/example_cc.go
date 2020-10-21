@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/core/chaincode/shim"
-	pb "github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/protos/peer"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/protos/peer"
 )
 
 // SimpleChaincode example simple Chaincode implementation

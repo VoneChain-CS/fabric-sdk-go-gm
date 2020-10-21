@@ -1,13 +1,11 @@
-// Copyright SecureKey Technologies Inc. All Rights Reserved.
-//
-// SPDX-License-Identifier: Apache-2.0
-
 module github.com/VoneChain-CS/fabric-sdk-go-gm
+
+go 1.14
 
 require (
 	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
-	github.com/cloudflare/cfssl v0.0.0-00010101000000-000000000000
+	github.com/cloudflare/cfssl v1.4.1
 	github.com/go-kit/kit v0.9.0
 	github.com/golang/mock v1.4.3
 	github.com/golang/protobuf v1.3.3
@@ -39,8 +37,7 @@ require (
 )
 
 replace (
-	github.com/Shopify/sarama => ./Shopify/sarama
-	github.com/cloudflare/cfssl v0.0.0-00010101000000-000000000000 => ./cfssl
+	github.com/cloudflare/cfssl v1.4.1 => ./cfssl
 	github.com/spf13/cast v1.3.1 => ./spf13/cast
 	github.com/spf13/cobra => ./spf13/cobra
 	github.com/spf13/jwalterweatherman => ./spf13/jwalterweatherman
@@ -48,5 +45,3 @@ replace (
 	github.com/tjfoc/gmsm v1.3.2 => ./tjfoc/gmsm
 	github.com/tjfoc/gmtls v1.2.1 => ./tjfoc/gmtls
 )
-
-go 1.14

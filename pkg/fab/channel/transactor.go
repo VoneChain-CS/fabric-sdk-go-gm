@@ -12,11 +12,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	contextImpl "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config/endpoint"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/txn"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	contextImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config/endpoint"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/txn"
 )
 
 // Transactor enables sending transactions and transaction proposals on the channel.

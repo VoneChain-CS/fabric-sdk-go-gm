@@ -10,22 +10,22 @@ SPDX-License-Identifier: Apache-2.0
 //
 // pkg/fabsdk: The main package of the Fabric SDK. This package enables creation of contexts based on
 // configuration. These contexts are used by the client packages listed below.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/fabsdk
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk
 //
 // pkg/client/channel: Provides channel transaction capabilities.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/client/channel
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel
 //
 // pkg/client/event: Provides channel event capabilities.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/client/event
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/event
 //
 // pkg/client/ledger: Enables queries to a channel's underlying ledger.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/client/ledger
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/ledger
 //
 // pkg/client/resmgmt: Provides resource management capabilities such as installing chaincode.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/client/resmgmt
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt
 //
 // pkg/client/msp: Enables identity management capability.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/client/msp
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp
 //
 // Basic workflow
 //
@@ -45,6 +45,6 @@ SPDX-License-Identifier: Apache-2.0
 // pkg/gateway: Enables Go developers to build client applications using the Hyperledger
 // Fabric programming model as described in the 'Developing Applications' chapter of the Fabric
 // documentation.
-// Reference: https://godoc.org/github.com/hyperledger/fabric-sdk-go/pkg/gateway
+// Reference: https://godoc.org/github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/gateway
 //
 package fabricsdk

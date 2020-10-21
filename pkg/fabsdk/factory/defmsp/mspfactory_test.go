@@ -12,16 +12,16 @@ import (
 
 	"reflect"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/msp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/test/mockmsp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
+	cryptosuiteImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/cryptosuite"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/mocks"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk/factory/defcore"
+	mspimpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/msp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/metadata"
 	"github.com/golang/mock/gomock"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/test/mockmsp"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
-	cryptosuiteImpl "github.com/hyperledger/fabric-sdk-go/pkg/core/cryptosuite"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/factory/defcore"
-	mspimpl "github.com/hyperledger/fabric-sdk-go/pkg/msp"
-	"github.com/hyperledger/fabric-sdk-go/test/metadata"
 	"github.com/stretchr/testify/assert"
 )
 

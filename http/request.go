@@ -13,7 +13,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/hyperledger/fabric-sdk-go/http/httptrace"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/http/httptrace"
 	tls "github.com/tjfoc/gmtls"
 	"io"
 	"io/ioutil"

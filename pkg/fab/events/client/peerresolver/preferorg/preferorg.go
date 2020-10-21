@@ -7,13 +7,13 @@ SPDX-License-Identifier: Apache-2.0
 package preferorg
 
 import (
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/options"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/events/client/peerresolver"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/events/client/peerresolver/minblockheight"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/events/service"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/client/peerresolver"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/client/peerresolver/minblockheight"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/events/service"
 )
 
 var logger = logging.NewLogger("fabsdk/fab")

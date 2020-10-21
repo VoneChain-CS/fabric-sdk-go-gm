@@ -11,21 +11,21 @@ import (
 	"testing"
 	"time"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/metadata"
 	"github.com/golang/mock/gomock"
-	"github.com/hyperledger/fabric-sdk-go/test/metadata"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/test/mockfab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config/lookup"
-	mocksConfig "github.com/hyperledger/fabric-sdk-go/pkg/core/mocks"
-	fabImpl "github.com/hyperledger/fabric-sdk-go/pkg/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/mocks"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/txn"
-	mspmocks "github.com/hyperledger/fabric-sdk-go/pkg/msp/test/mockmsp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/test/mockfab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config/lookup"
+	mocksConfig "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/mocks"
+	fabImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/mocks"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/txn"
+	mspmocks "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/msp/test/mockmsp"
 )
 
 func TestCreateTxnID(t *testing.T) {
@@ -306,13 +306,13 @@ func TestExcludedOrdrerer(t *testing.T) {
 	var orderersCfgs []fab.OrdererConfig
 	for _, v := range networkConfig.Orderers {
 		orderersCfgs = append(orderersCfgs, fab.OrdererConfig{
-			URL: v.URL,
+			URL:         v.URL,
 			GRPCOptions: v.GRPCOptions,
 		})
 	}
 
 	mockEndpoingCfg.EXPECT().ChannelConfig("mychannel").Return(&fab.ChannelEndpointConfig{
-		Orderers: []string{}})  // empty channel.Orderers SDK config, to force fetching from orderers SDK config
+		Orderers: []string{}}) // empty channel.Orderers SDK config, to force fetching from orderers SDK config
 	mockEndpoingCfg.EXPECT().OrdererConfig("example.com").Return(&orderersCfgs[0], true, false)
 	mockEndpoingCfg.EXPECT().OrdererConfig("example2.com").Return(&orderersCfgs[1], true, false)
 	mockEndpoingCfg.EXPECT().OrdererConfig("example3.com").Return(nil, false, true) // true means ignored
@@ -342,7 +342,6 @@ func TestExcludedOrdrerer(t *testing.T) {
 	assert.NotEmpty(t, o)
 	assert.Equal(t, 2, len(o), "expected 2 orderers from response orderers list")
 
-
 	// now retry the same previous two tests with channelConfig returning list of orderers
 	mockEndpoingCfg.EXPECT().ChannelConfig("mychannel").Return(&fab.ChannelEndpointConfig{
 		Orderers: chConfig.MockOrderers}) // read orderers from channel.Orderers SDK config
@@ -361,10 +360,10 @@ func TestExcludedOrdrerer(t *testing.T) {
 
 	// now try with example2.com not found, to be populated from chConfig
 	mockEndpoingCfg.EXPECT().ChannelConfig("mychannel").Return(&fab.ChannelEndpointConfig{
-		Orderers: chConfig.MockOrderers})  // read orderers from channel.Orderers SDK config
+		Orderers: chConfig.MockOrderers}) // read orderers from channel.Orderers SDK config
 	mockEndpoingCfg.EXPECT().OrdererConfig("example.com").Return(&orderersCfgs[0], true, false) // found
-	mockEndpoingCfg.EXPECT().OrdererConfig("example2.com").Return(nil, false, false) // not found
-	mockEndpoingCfg.EXPECT().OrdererConfig("example3.com").Return(nil, false, true) // excluded
+	mockEndpoingCfg.EXPECT().OrdererConfig("example2.com").Return(nil, false, false)            // not found
+	mockEndpoingCfg.EXPECT().OrdererConfig("example3.com").Return(nil, false, true)             // excluded
 
 	ctx.SetEndpointConfig(mockEndpoingCfg)
 
@@ -372,8 +371,8 @@ func TestExcludedOrdrerer(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotEmpty(t, o)
 	assert.Equal(t, 1, len(o),
-		"expected 1 orderer from response orderers list since 1 orderer is not found " +
-		"and another is excluded")
+		"expected 1 orderer from response orderers list since 1 orderer is not found "+
+			"and another is excluded")
 }
 
 //endpointConfigEntity contains endpoint config elements needed by endpointconfig

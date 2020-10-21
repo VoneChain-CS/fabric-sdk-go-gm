@@ -7,16 +7,16 @@ SPDX-License-Identifier: Apache-2.0
 package defcore
 
 import (
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/logging/api"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/api"
 
-	cryptosuiteimpl "github.com/hyperledger/fabric-sdk-go/pkg/core/cryptosuite/bccsp/sw"
-	signingMgr "github.com/hyperledger/fabric-sdk-go/pkg/fab/signingmgr"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/provider/fabpvdr"
+	cryptosuiteimpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/cryptosuite/bccsp/sw"
+	signingMgr "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/signingmgr"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk/provider/fabpvdr"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/logging/modlog"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/modlog"
 )
 
 var logger = logging.NewLogger("fabsdk")

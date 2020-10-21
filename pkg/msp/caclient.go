@@ -10,11 +10,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
-	contextApi "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
-	"github.com/hyperledger/fabric-sdk-go/pkg/msp/api"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	contextApi "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/msp"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/msp/api"
 	"github.com/pkg/errors"
 )
 

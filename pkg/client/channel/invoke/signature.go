@@ -7,8 +7,8 @@ SPDX-License-Identifier: Apache-2.0
 package invoke
 
 import (
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/verifier"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/verifier"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 )
 
 //NewSignatureValidationHandler returns a handler that validates an endorsement

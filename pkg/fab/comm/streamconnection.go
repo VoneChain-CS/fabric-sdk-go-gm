@@ -11,12 +11,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/verifier"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/options"
-	fabcontext "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"google.golang.org/grpc"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/verifier"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
+	fabcontext "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 	credentials "github.com/tjfoc/gmtls/gmcredentials"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 )
 

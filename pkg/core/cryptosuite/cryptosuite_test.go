@@ -11,7 +11,7 @@ import (
 
 	"sync/atomic"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/cryptosuite/bccsp/sw"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/cryptosuite/bccsp/sw"
 	"github.com/stretchr/testify/assert"
 )
 

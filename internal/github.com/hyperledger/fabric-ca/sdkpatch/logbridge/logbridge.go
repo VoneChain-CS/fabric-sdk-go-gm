@@ -11,8 +11,8 @@ Please review third_party pinning scripts and patches for more details.
 package logbridge
 
 import (
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
 	clog "github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
 )
 
 var logger *logging.Logger

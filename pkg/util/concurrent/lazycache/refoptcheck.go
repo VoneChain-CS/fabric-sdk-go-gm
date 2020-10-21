@@ -9,7 +9,7 @@ package lazycache
 import (
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/util/concurrent/lazyref"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/concurrent/lazyref"
 )
 
 // refOptCheck is used to test whether any of the lazyref options have been passed in

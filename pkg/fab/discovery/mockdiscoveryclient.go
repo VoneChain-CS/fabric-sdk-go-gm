@@ -10,12 +10,12 @@ import (
 	"context"
 	"sync"
 
+	discclient "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/discovery/client"
+	gprotoext "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/gossip/protoext"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/discovery/mocks"
 	"github.com/hyperledger/fabric-protos-go/discovery"
 	"github.com/hyperledger/fabric-protos-go/gossip"
-	discclient "github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/discovery/client"
-	gprotoext "github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/gossip/protoext"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fab/discovery/mocks"
 	"github.com/pkg/errors"
 )
 
@@ -94,7 +94,7 @@ func (r *fakeResponse) ForChannel(string) discclient.ChannelResponse {
 
 	//usually "access denied" is a successful response.
 	//The problem is that fakeResponse struct contains only peers arr and not message with content, so need to add bool if access denied
-	//see origins of https://github.com/hyperledger/fabric-sdk-go/pull/62
+	//see origins of https://github.com/VoneChain-CS/fabric-sdk-go-gm/pull/62
 	if r.accessDenied {
 		chanResp.err = errors.New("access denied")
 	}

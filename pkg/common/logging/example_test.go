@@ -8,7 +8,7 @@ package logging
 import (
 	"fmt"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/logging/testdata"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/testdata"
 )
 
 var modName = "module-xyz"

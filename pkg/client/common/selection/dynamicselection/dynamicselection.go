@@ -9,16 +9,16 @@ package dynamicselection
 import (
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/util/concurrent/lazycache"
-	"github.com/hyperledger/fabric-sdk-go/pkg/util/concurrent/lazyref"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/concurrent/lazycache"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/concurrent/lazyref"
 
-	copts "github.com/hyperledger/fabric-sdk-go/pkg/common/options"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
+	copts "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 	"github.com/pkg/errors"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/selection/dynamicselection/pgresolver"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/selection/options"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/selection/dynamicselection/pgresolver"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/selection/options"
 )
 
 const defaultCacheTimeout = 30 * time.Minute

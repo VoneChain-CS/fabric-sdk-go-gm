@@ -7,14 +7,14 @@ SPDX-License-Identifier: Apache-2.0
 package dynamicdiscovery
 
 import (
-	discclient "github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/discovery/client"
-	"github.com/hyperledger/fabric-sdk-go/pkg/client/common/random"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/multi"
-	coptions "github.com/hyperledger/fabric-sdk-go/pkg/common/options"
-	contextAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	reqContext "github.com/hyperledger/fabric-sdk-go/pkg/context"
-	fabdiscovery "github.com/hyperledger/fabric-sdk-go/pkg/fab/discovery"
+	discclient "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/discovery/client"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/common/random"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/multi"
+	coptions "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/options"
+	contextAPI "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
+	reqContext "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
+	fabdiscovery "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/discovery"
 	"github.com/pkg/errors"
 )
 

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package metrics
 
-import "github.com/hyperledger/fabric-sdk-go/internal/github.com/hyperledger/fabric/common/metrics"
+import "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/common/metrics"
 
 var (
 	// for now, only channel clients require metrics tracking. TODO: update to generalize metrics for other client types if needed.

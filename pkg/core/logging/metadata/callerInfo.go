@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0
 
 package metadata
 
-import "github.com/hyperledger/fabric-sdk-go/pkg/core/logging/api"
+import "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/logging/api"
 
 type callerInfoKey struct {
 	module string

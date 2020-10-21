@@ -15,11 +15,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/util/concurrent/lazyref"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/concurrent/lazyref"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/hyperledger/fabric-sdk-go/pkg/util/test"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/test"
 )
 
 func ExampleCache_MustGet() {
