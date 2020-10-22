@@ -56,7 +56,7 @@ type Descriptor struct {
 
 // ComputePackageID returns the package ID from the given label and install package
 func ComputePackageID(label string, pkgBytes []byte) string {
-	return fmt.Sprintf("%s:%x", label, util.ComputeSHA256(pkgBytes))
+	return fmt.Sprintf("%s:%x", label, util.ComputeGMSM3(pkgBytes))
 }
 
 // Validate validates the package descriptor
