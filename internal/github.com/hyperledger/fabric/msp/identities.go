@@ -162,15 +162,16 @@ func (id *identity) Verify(msg []byte, sig []byte) error {
 	// mspIdentityLogger.Infof("Verifying signature")
 
 	// Compute Hash
-	hashOpt, err := id.getHashOpt(id.msp.cryptoConfig.SignatureHashFamily)
+	/*hashOpt, err := id.getHashOpt(id.msp.cryptoConfig.SignatureHashFamily)
 	if err != nil {
 		return errors.WithMessage(err, "failed getting hash function options")
-	}
+	}*/
 
-	digest, err := id.msp.bccsp.Hash(msg, hashOpt)
-	if err != nil {
-		return errors.WithMessage(err, "failed computing digest")
-	}
+	digest := msg
+	/*	digest, err := id.msp.bccsp.Hash(msg, hashOpt)
+		if err != nil {
+			return errors.WithMessage(err, "failed computing digest")
+		}*/
 
 	if mspIdentityLogger.IsEnabledFor(logging.DEBUG) {
 		mspIdentityLogger.Debugf("Verify: digest = %s", hex.Dump(digest))
