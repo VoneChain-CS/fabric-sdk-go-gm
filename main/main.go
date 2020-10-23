@@ -3,13 +3,17 @@ package main
 import (
 	"crypto/ecdsa"
 	"fmt"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/common/policydsl"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/ledger"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
+	lcpackager "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/ccpackager/lifecycle"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/tjfoc/gmsm/sm2"
 	"io/ioutil"
 	"log"
@@ -17,11 +21,22 @@ import (
 )
 
 var (
-	cc          = ""
-	user        = ""
-	secret      = ""
-	channelName = ""
-	lvl         = logging.INFO
+	cc            = ""
+	user          = ""
+	secret        = ""
+	channelName   = ""
+	lvl           = logging.INFO
+	chaincodrPath = "github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/chaincode/abstore/go"
+)
+
+const (
+	channelID      = "mychannel"
+	orgName        = "Org1"
+	orgName2       = "Org2"
+	orgAdmin       = "Admin"
+	ordererOrgName = "OrdererOrg"
+	peer1          = "peer0.org1.example.com"
+	peer2          = "peer0.org2.example.com"
 )
 
 func queryInstalledCC(sdk *fabsdk.FabricSDK) {
@@ -179,7 +194,7 @@ func main() {
 	user = "admin"
 	secret = "adminpw"
 	channelName = "mychannel"
-	cc = "mycc"
+	cc = "mycc2"
 	fmt.Println("Reading connection profile..")
 	c := config.FromFile("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/config_test.yaml")
 	sdk, err := fabsdk.New(c)
@@ -193,7 +208,25 @@ func main() {
 	//registerUser(sdk)
 	enrollUser(sdk)
 
-	clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user))
+	//prepare context
+	adminContext := sdk.Context(fabsdk.WithUser(user), fabsdk.WithOrg(orgName))
+
+	// Org resource management client
+	orgResMgmt, err := resmgmt.New(adminContext)
+
+	if err != nil {
+
+	}
+	/*	label ,ccPkg :=packageCC("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/chaincode/abstore/go")
+	    installCC(label,ccPkg,orgResMgmt)
+		packageID := lcpackager.ComputePackageID(label, ccPkg)
+		approveCC(cc,packageID,orgResMgmt)*/
+	//approveCC(cc,"mycc14:40d82c2d3d346c5d39110fb19b8ba574da67efcbf5751608e89f2b6c46217531,",orgResMgmt)
+
+	commitCC(orgResMgmt)
+	//queryInstalled(cc,"mycc13:85304300b7945ef1516aa2196c3c9bca25c712a2266a99ce47b6ae44cf159e6a",orgResMgmt)
+	//queryApprovedCC(orgResMgmt)
+	/*clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user))
 	ledgerClient, err := ledger.New(clientChannelContext)
 	if err != nil {
 		fmt.Printf("Failed to create channel [%s] client: %#v", channelName, err)
@@ -214,6 +247,104 @@ func main() {
 	invokeCC(client)
 	old := queryCC(client, []byte("a"))
 
-	fmt.Println(old)
+	fmt.Println(old)*/
 	fmt.Println("Done.")
+}
+
+func packageCC(path string) (string, []byte) {
+	desc := &lcpackager.Descriptor{
+		Path:  path,
+		Type:  pb.ChaincodeSpec_GOLANG,
+		Label: cc,
+	}
+	ccPkg, err := lcpackager.NewCCPackage(desc)
+	if err != nil {
+		fmt.Print(err)
+	}
+	return desc.Label, ccPkg
+}
+
+func installCC(label string, ccPkg []byte, orgResMgmt *resmgmt.Client) {
+	installCCReq := resmgmt.LifecycleInstallCCRequest{
+		Label:   label,
+		Package: ccPkg,
+	}
+
+	resp, err := orgResMgmt.LifecycleInstallCC(installCCReq, resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Print(resp)
+}
+
+func approveCC(ccID string, packageID string, orgResMgmt *resmgmt.Client) {
+	ccPolicy, _ := policydsl.FromString("OR('Org1MSP.member','Org2MSP.member')")
+	approveCCReq := resmgmt.LifecycleApproveCCRequest{
+
+		Name:              ccID,
+		Version:           "1",
+		PackageID:         packageID,
+		Sequence:          1,
+		EndorsementPlugin: "escc",
+		ValidationPlugin:  "vscc",
+		SignaturePolicy:   ccPolicy,
+		InitRequired:      true,
+	}
+
+	txnID, err := orgResMgmt.LifecycleApproveCC(channelID, approveCCReq, resmgmt.WithTargetEndpoints(peer1), resmgmt.WithOrdererEndpoint("orderer.example.com"), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	fmt.Print(txnID)
+}
+
+func queryInstalled(label string, packageID string, orgResMgmt *resmgmt.Client) {
+	resp, err := orgResMgmt.LifecycleQueryInstalledCC(resmgmt.WithTargetEndpoints(peer1), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Print(resp)
+}
+
+func queryApprovedCC(orgResMgmt *resmgmt.Client) {
+	queryApprovedCCReq := resmgmt.LifecycleQueryApprovedCCRequest{
+		Name:     cc,
+		Sequence: 1,
+	}
+	resp, err := orgResMgmt.LifecycleQueryApprovedCC(channelID, queryApprovedCCReq, resmgmt.WithTargetEndpoints(peer1), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Print(resp)
+}
+
+func getInstalledCCPackage(packageID string, orgResMgmt *resmgmt.Client) []byte {
+	resp, err := orgResMgmt.LifecycleGetInstalledCCPackage(packageID, resmgmt.WithTargetEndpoints(peer1), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		fmt.Print(err)
+		return nil
+	}
+	return resp
+}
+
+func commitCC(orgResMgmt *resmgmt.Client) {
+	ccPolicy, _ := policydsl.FromString("OR('Org1MSP.member','Org2MSP.member')")
+	req := resmgmt.LifecycleCommitCCRequest{
+		Name:              cc,
+		Version:           "1",
+		Sequence:          1,
+		EndorsementPlugin: "escc",
+		ValidationPlugin:  "vscc",
+		SignaturePolicy:   ccPolicy,
+		InitRequired:      true,
+	}
+	txnID, err := orgResMgmt.LifecycleCommitCC(channelID, req, resmgmt.WithRetry(retry.DefaultResMgmtOpts),
+		resmgmt.WithTargetEndpoints(peer1, peer2),
+		resmgmt.WithOrdererEndpoint("orderer.example.com"))
+	if err != nil {
+		log.Print(err)
+	}
+	log.Print(txnID)
 }

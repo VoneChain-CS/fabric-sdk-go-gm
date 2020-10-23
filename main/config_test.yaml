@@ -100,6 +100,66 @@ channels:
         # Default: true
         eventSource: true
 
+      peer0.org2.example.com:
+          # [Optional]. will this peer be sent transaction proposals for endorsement? The peer must
+          # have the chaincode installed. The app can also use this property to decide which peers
+          # to send the chaincode install request. Default: true
+          endorsingPeer: false
+
+          # [Optional]. will this peer be sent query proposals? The peer must have the chaincode
+          # installed. The app can also use this property to decide which peers to send the
+          # chaincode install request. Default: true
+          chaincodeQuery: true
+
+          # [Optional]. will this peer be sent query proposals that do not require chaincodes, like
+          # queryBlock(), queryTransaction(), etc. Default: true
+          ledgerQuery: true
+
+          # [Optional]. will this peer be the target of the SDK's listener registration? All peers can
+          # produce events but the app typically only needs to connect to one to listen to events.
+          # Default: true
+          eventSource: false
+
+      peer1.org1.example.com:
+          # [Optional]. will this peer be sent transaction proposals for endorsement? The peer must
+          # have the chaincode installed. The app can also use this property to decide which peers
+          # to send the chaincode install request. Default: true
+          endorsingPeer: false
+
+          # [Optional]. will this peer be sent query proposals? The peer must have the chaincode
+          # installed. The app can also use this property to decide which peers to send the
+          # chaincode install request. Default: true
+          chaincodeQuery: true
+
+          # [Optional]. will this peer be sent query proposals that do not require chaincodes, like
+          # queryBlock(), queryTransaction(), etc. Default: true
+          ledgerQuery: true
+
+          # [Optional]. will this peer be the target of the SDK's listener registration? All peers can
+          # produce events but the app typically only needs to connect to one to listen to events.
+          # Default: true
+          eventSource: true
+
+      peer1.org2.example.com:
+        # [Optional]. will this peer be sent transaction proposals for endorsement? The peer must
+        # have the chaincode installed. The app can also use this property to decide which peers
+        # to send the chaincode install request. Default: true
+        endorsingPeer: false
+
+        # [Optional]. will this peer be sent query proposals? The peer must have the chaincode
+        # installed. The app can also use this property to decide which peers to send the
+        # chaincode install request. Default: true
+        chaincodeQuery: true
+
+        # [Optional]. will this peer be sent query proposals that do not require chaincodes, like
+        # queryBlock(), queryTransaction(), etc. Default: true
+        ledgerQuery: true
+
+        # [Optional]. will this peer be the target of the SDK's listener registration? All peers can
+        # produce events but the app typically only needs to connect to one to listen to events.
+        # Default: true
+        eventSource: false
+
     # [Optional]. The application can use these options to perform channel operations like retrieving channel
     # config etc.
     policies:
@@ -279,7 +339,7 @@ peers:
       path: ${FABRIC_SDK_GO_PROJECT_PATH}/${CRYPTOCONFIG_FIXTURES_PATH}/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
 
   peer0.org2.example.com:
-    url: peer0.org2.example.com:8051
+    url: peer0.org2.example.com:9051
     #TODO to be moved to high level, common for all grpc connections
     grpcOptions:
       ssl-target-name-override: peer0.org2.example.com
