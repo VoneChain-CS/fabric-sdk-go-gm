@@ -1,23 +1,23 @@
 package main
 
 import (
-	"crypto/ecdsa"
 	"fmt"
-	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/common/policydsl"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/channel"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/ledger"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp"
+	mspclient "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/logging"
+	pmsp "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/msp"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
 	lcpackager "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/ccpackager/lifecycle"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/test/metadata"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/tjfoc/gmsm/sm2"
-	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 var (
@@ -31,6 +31,7 @@ var (
 
 const (
 	channelID      = "mychannel"
+	newChannelID      = "mychannel1"
 	orgName        = "Org1"
 	orgName2       = "Org2"
 	orgAdmin       = "Admin"
@@ -79,6 +80,20 @@ func invokeCC(client *channel.Client) {
 		ChaincodeID: cc,
 		Fcn:         "invoke",
 		Args:        invokeArgs,
+	})
+
+	if err != nil {
+		fmt.Printf("Failed to invoke: %+v\n", err)
+	}
+}
+func initCC(client *channel.Client) {
+	invokeArgs := [][]byte{[]byte("a"), []byte("100"),[]byte("b"), []byte("100")}
+
+	_, err := client.Execute(channel.Request{
+		ChaincodeID: cc,
+		Fcn:         "Init",
+		Args:        invokeArgs,
+		IsInit:  true,
 	})
 
 	if err != nil {
@@ -168,33 +183,13 @@ func readInput() {
 	cc = os.Args[4]
 }
 
-func main1() {
-	cert, err := sm2.ReadCertificateFromPem("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/cert.pem")
-	cert1, err := sm2.ReadCertificateFromPem("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/cert1.pem")
-	log.Printf("cert---,%v", cert)
-	bytes, _ := ioutil.ReadFile("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/cert.pem")
-	log.Printf("cert---,%v", bytes)
-	if err != nil {
-		fmt.Printf("failed to read cert file")
-	}
-	err = cert1.CheckSignature(cert.SignatureAlgorithm, cert.RawTBSCertificate, cert.Signature)
-	pub := cert.PublicKey
-	puk := pub.(*ecdsa.PublicKey)
-	fmt.Printf("puk.X", puk.X)
-	fmt.Printf("puk.Y", puk.Y)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		fmt.Printf("CheckSignature ok\n")
-	}
-}
 
 func main() {
 	//readInput()
 	user = "admin"
 	secret = "adminpw"
 	channelName = "mychannel"
-	cc = "mycc2"
+	cc = "mycc3"
 	fmt.Println("Reading connection profile..")
 	c := config.FromFile("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/config_test.yaml")
 	sdk, err := fabsdk.New(c)
@@ -217,15 +212,37 @@ func main() {
 	if err != nil {
 
 	}
-	/*	label ,ccPkg :=packageCC("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/chaincode/abstore/go")
-	    installCC(label,ccPkg,orgResMgmt)
-		packageID := lcpackager.ComputePackageID(label, ccPkg)
-		approveCC(cc,packageID,orgResMgmt)*/
+/*	label ,ccPkg :=packageCC("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/chaincode/abstore/go")
+	installCC(label,ccPkg,orgResMgmt)
+	packageID := lcpackager.ComputePackageID(label, ccPkg)
+	approveCC(cc,packageID,orgResMgmt)*/
 	//approveCC(cc,"mycc14:40d82c2d3d346c5d39110fb19b8ba574da67efcbf5751608e89f2b6c46217531,",orgResMgmt)
 
-	commitCC(orgResMgmt)
+	//commitCC(orgResMgmt)
 	//queryInstalled(cc,"mycc13:85304300b7945ef1516aa2196c3c9bca25c712a2266a99ce47b6ae44cf159e6a",orgResMgmt)
 	//queryApprovedCC(orgResMgmt)
+
+	joinChannel(orgResMgmt)
+
+
+
+
+
+
+	//clientContext allows creation of transactions using the supplied identity as the credential.
+/*	clientContext := sdk.Context(fabsdk.WithUser(orgAdmin), fabsdk.WithOrg(ordererOrgName))
+
+	// Resource management client is responsible for managing channels (create/update channel)
+	// Supply user that has privileges to create channel (in this case orderer admin)
+	resMgmtClient, err := resmgmt.New(clientContext)
+	if err != nil {
+		log.Print(err)
+	}*/
+
+	//createChannel(sdk,resMgmtClient)
+
+
+
 	/*clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user))
 	ledgerClient, err := ledger.New(clientChannelContext)
 	if err != nil {
@@ -244,7 +261,7 @@ func main() {
 		fmt.Printf("Failed to create channel [%s]:", channelName, err)
 	}
 
-	invokeCC(client)
+	initCC(client)
 	old := queryCC(client, []byte("a"))
 
 	fmt.Println(old)*/
@@ -278,16 +295,16 @@ func installCC(label string, ccPkg []byte, orgResMgmt *resmgmt.Client) {
 }
 
 func approveCC(ccID string, packageID string, orgResMgmt *resmgmt.Client) {
-	ccPolicy, _ := policydsl.FromString("OR('Org1MSP.member','Org2MSP.member')")
+	//ccPolicy, _ := policydsl.FromString("OR('Org1MSP.member')")
 	approveCCReq := resmgmt.LifecycleApproveCCRequest{
 
 		Name:              ccID,
 		Version:           "1",
 		PackageID:         packageID,
 		Sequence:          1,
-		EndorsementPlugin: "escc",
+/*		EndorsementPlugin: "escc",
 		ValidationPlugin:  "vscc",
-		SignaturePolicy:   ccPolicy,
+		SignaturePolicy:   ccPolicy,*/
 		InitRequired:      true,
 	}
 
@@ -330,21 +347,50 @@ func getInstalledCCPackage(packageID string, orgResMgmt *resmgmt.Client) []byte 
 }
 
 func commitCC(orgResMgmt *resmgmt.Client) {
-	ccPolicy, _ := policydsl.FromString("OR('Org1MSP.member','Org2MSP.member')")
+	//ccPolicy, _ := policydsl.FromString("OR('Org2MSP.member')")
 	req := resmgmt.LifecycleCommitCCRequest{
 		Name:              cc,
 		Version:           "1",
 		Sequence:          1,
-		EndorsementPlugin: "escc",
+/*		EndorsementPlugin: "escc",
 		ValidationPlugin:  "vscc",
-		SignaturePolicy:   ccPolicy,
+		SignaturePolicy:   ccPolicy,*/
 		InitRequired:      true,
 	}
 	txnID, err := orgResMgmt.LifecycleCommitCC(channelID, req, resmgmt.WithRetry(retry.DefaultResMgmtOpts),
-		resmgmt.WithTargetEndpoints(peer1, peer2),
+		resmgmt.WithTargetEndpoints(peer1),
 		resmgmt.WithOrdererEndpoint("orderer.example.com"))
 	if err != nil {
 		log.Print(err)
 	}
 	log.Print(txnID)
+}
+
+
+
+func createChannel(sdk *fabsdk.FabricSDK, resMgmtClient *resmgmt.Client) {
+	mspClient, err := mspclient.New(sdk.Context(), mspclient.WithOrg(orgName))
+	if err != nil {
+		log.Print(err)
+	}
+	adminIdentity, err := mspClient.GetSigningIdentity(orgAdmin)
+	if err != nil {
+		log.Print(err)
+	}
+	req := resmgmt.SaveChannelRequest{ChannelID: newChannelID,
+		ChannelConfigPath: filepath.Join(metadata.GetProjectPath(), metadata.ChannelConfigPath, newChannelID + ".tx"),
+		SigningIdentities: []pmsp.SigningIdentity{adminIdentity}}
+	txID, _ := resMgmtClient.SaveChannel(req, resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithOrdererEndpoint("orderer.example.com"))
+	log.Print(txID)
+
+
+}
+
+
+func joinChannel(orgResMgmt *resmgmt.Client){
+
+	// Org peers join channel
+	if err := orgResMgmt.JoinChannel(newChannelID, resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithOrdererEndpoint("orderer.example.com")); err != nil {
+		fmt.Print(err)
+	}
 }
