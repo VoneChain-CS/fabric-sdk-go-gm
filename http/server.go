@@ -31,7 +31,7 @@ import (
 
 	"golang.org/x/net/http/httpguts"
 
-	tls "github.com/VoneChain-CS/fabric-sdk-go-gm/tjfoc/gmtls"
+	tls "github.com/tjfoc/gmtls"
 )
 
 // Errors used by the HTTP server.
