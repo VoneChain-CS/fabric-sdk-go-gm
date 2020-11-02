@@ -14,12 +14,13 @@ import (
 	"errors"
 	"net"
 	"net/mail"
-	"net/url"
+	"reflect"
 	"strings"
 
-	cferr "github.com/cloudflare/cfssl/errors"
-	"github.com/cloudflare/cfssl/helpers"
-	"github.com/cloudflare/cfssl/log"
+	cferr "github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/errors"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/helpers"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/log"
+	"github.com/tjfoc/gmsm/sm2"
 )
 
 const (
@@ -46,7 +47,7 @@ type KeyRequest struct {
 
 // NewKeyRequest returns a default KeyRequest.
 func NewKeyRequest() *KeyRequest {
-	return &KeyRequest{"ecdsa", curveP256}
+	return &KeyRequest{"gmsm2", curveP256}
 }
 
 // Algo returns the requested key algorithm represented as a string.
@@ -85,6 +86,8 @@ func (kr *KeyRequest) Generate() (crypto.PrivateKey, error) {
 			return nil, errors.New("invalid curve")
 		}
 		return ecdsa.GenerateKey(curve, rand.Reader)
+	case "gmsm2":
+		return sm2.GenerateKey()
 	default:
 		return nil, errors.New("invalid algorithm")
 	}
@@ -132,12 +135,12 @@ type CAConfig struct {
 // A CertificateRequest encapsulates the API interface to the
 // certificate request functionality.
 type CertificateRequest struct {
-	CN           string     `json:"CN" yaml:"CN"`
-	Names        []Name     `json:"names" yaml:"names"`
-	Hosts        []string   `json:"hosts" yaml:"hosts"`
+	CN           string      `json:"CN" yaml:"CN"`
+	Names        []Name      `json:"names" yaml:"names"`
+	Hosts        []string    `json:"hosts" yaml:"hosts"`
 	KeyRequest   *KeyRequest `json:"key,omitempty" yaml:"key,omitempty"`
-	CA           *CAConfig  `json:"ca,omitempty" yaml:"ca,omitempty"`
-	SerialNumber string     `json:"serialnumber,omitempty" yaml:"serialnumber,omitempty"`
+	CA           *CAConfig   `json:"ca,omitempty" yaml:"ca,omitempty"`
+	SerialNumber string      `json:"serialnumber,omitempty" yaml:"serialnumber,omitempty"`
 }
 
 // New returns a new, empty CertificateRequest with a
@@ -360,14 +363,15 @@ func Regenerate(priv crypto.Signer, csr []byte) ([]byte, error) {
 // Generate creates a new CSR from a CertificateRequest structure and
 // an existing key. The KeyRequest field is ignored.
 func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err error) {
-	sigAlgo := helpers.SignerAlgo(priv)
+	log.Infof("type---%v", reflect.TypeOf(priv.Public()))
+	/*sigAlgo := helpers.SignerAlgo(priv)
 	if sigAlgo == x509.UnknownSignatureAlgorithm {
 		return nil, cferr.New(cferr.PrivateKeyError, cferr.Unavailable)
-	}
+	}*/
 
-	var tpl = x509.CertificateRequest{
+	var tpl = sm2.CertificateRequest{
 		Subject:            req.Name(),
-		SignatureAlgorithm: sigAlgo,
+		SignatureAlgorithm: sm2.SM2WithSM3,
 	}
 
 	for i := range req.Hosts {
@@ -375,8 +379,6 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 			tpl.IPAddresses = append(tpl.IPAddresses, ip)
 		} else if email, err := mail.ParseAddress(req.Hosts[i]); err == nil && email != nil {
 			tpl.EmailAddresses = append(tpl.EmailAddresses, email.Address)
-		} else if uri, err := url.ParseRequestURI(req.Hosts[i]); err == nil && uri != nil {
-			tpl.URIs = append(tpl.URIs, uri)
 		} else {
 			tpl.DNSNames = append(tpl.DNSNames, req.Hosts[i])
 		}
@@ -390,7 +392,7 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 		}
 	}
 
-	csr, err = x509.CreateCertificateRequest(rand.Reader, &tpl, priv)
+	csr, err = sm2.CreateCertificateRequest(rand.Reader, &tpl, priv)
 	if err != nil {
 		log.Errorf("failed to generate a CSR: %v", err)
 		err = cferr.Wrap(cferr.CSRError, cferr.BadRequest, err)
@@ -407,7 +409,7 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 }
 
 // appendCAInfoToCSR appends CAConfig BasicConstraint extension to a CSR
-func appendCAInfoToCSR(reqConf *CAConfig, csr *x509.CertificateRequest) error {
+func appendCAInfoToCSR(reqConf *CAConfig, csr *sm2.CertificateRequest) error {
 	pathlen := reqConf.PathLength
 	if pathlen == 0 && !reqConf.PathLenZero {
 		pathlen = -1

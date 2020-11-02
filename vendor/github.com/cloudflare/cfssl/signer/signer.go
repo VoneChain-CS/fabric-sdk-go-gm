@@ -16,11 +16,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cfssl/certdb"
-	"github.com/cloudflare/cfssl/config"
-	"github.com/cloudflare/cfssl/csr"
-	cferr "github.com/cloudflare/cfssl/errors"
-	"github.com/cloudflare/cfssl/info"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/certdb"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/config"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/csr"
+	cferr "github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/errors"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/info"
 )
 
 // Subject contains the information that should be used to override the

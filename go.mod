@@ -36,8 +36,9 @@ require (
 	gopkg.in/yaml.v2 v2.3.0
 )
 
+
 replace (
-	github.com/cloudflare/cfssl v1.4.1 => ./cfssl
+	github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl v0.0.0-20201021101014-9a2abd087e1c => ./cfssl
 	github.com/spf13/cast v1.3.1 => ./spf13/cast
 	github.com/spf13/cobra => ./spf13/cobra
 	github.com/spf13/jwalterweatherman => ./spf13/jwalterweatherman
