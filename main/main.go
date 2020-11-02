@@ -31,7 +31,7 @@ var (
 
 const (
 	channelID      = "mychannel"
-	newChannelID      = "mychannel1"
+	newChannelID   = "mychannel1"
 	orgName        = "Org1"
 	orgName2       = "Org2"
 	orgAdmin       = "Admin"
@@ -87,13 +87,13 @@ func invokeCC(client *channel.Client) {
 	}
 }
 func initCC(client *channel.Client) {
-	invokeArgs := [][]byte{[]byte("a"), []byte("100"),[]byte("b"), []byte("100")}
+	invokeArgs := [][]byte{[]byte("a"), []byte("100"), []byte("b"), []byte("100")}
 
 	_, err := client.Execute(channel.Request{
 		ChaincodeID: cc,
 		Fcn:         "Init",
 		Args:        invokeArgs,
-		IsInit:  true,
+		IsInit:      true,
 	})
 
 	if err != nil {
@@ -183,13 +183,12 @@ func readInput() {
 	cc = os.Args[4]
 }
 
-
 func main() {
 	//readInput()
 	user = "admin"
 	secret = "adminpw"
 	channelName = "mychannel"
-	cc = "mycc3"
+	cc = "mycc_1"
 	fmt.Println("Reading connection profile..")
 	c := config.FromFile("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-sdk-go-gm/main/config_test.yaml")
 	sdk, err := fabsdk.New(c)
@@ -212,36 +211,33 @@ func main() {
 	if err != nil {
 
 	}
-/*	label ,ccPkg :=packageCC("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/chaincode/abstore/go")
-	installCC(label,ccPkg,orgResMgmt)
-	packageID := lcpackager.ComputePackageID(label, ccPkg)
-	approveCC(cc,packageID,orgResMgmt)*/
+	/*	label ,ccPkg :=packageCC("/opt/goworkspace/src/github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/chaincode/abstore/go")
+		installCC(label,ccPkg,orgResMgmt)
+		packageID := lcpackager.ComputePackageID(label, ccPkg)
+		approveCC(cc,packageID,orgResMgmt)*/
 	//approveCC(cc,"mycc14:40d82c2d3d346c5d39110fb19b8ba574da67efcbf5751608e89f2b6c46217531,",orgResMgmt)
 
 	//commitCC(orgResMgmt)
-	//queryInstalled(cc,"mycc13:85304300b7945ef1516aa2196c3c9bca25c712a2266a99ce47b6ae44cf159e6a",orgResMgmt)
+	//queryInstalled(cc,"mycc_1:e3f65f810b94ef30acada1caaf823e2e919d97df56672493e65d8fa0fcad4d6c",orgResMgmt)
 	//queryApprovedCC(orgResMgmt)
 
-	joinChannel(orgResMgmt)
-
-
-
-
-
+	//joinChannel(orgResMgmt)
+	//QueryConfigFromOrderer(channelID,orgResMgmt)
+	//QueryInstantiatedChaincodes(channelID,orgResMgmt)
+	//checkCCCommitReadiness("mycc_1:e3f65f810b94ef30acada1caaf823e2e919d97df56672493e65d8fa0fcad4d6c",orgResMgmt)
+	queryCommittedCC(orgResMgmt)
 
 	//clientContext allows creation of transactions using the supplied identity as the credential.
-/*	clientContext := sdk.Context(fabsdk.WithUser(orgAdmin), fabsdk.WithOrg(ordererOrgName))
+	/*	clientContext := sdk.Context(fabsdk.WithUser(orgAdmin), fabsdk.WithOrg(ordererOrgName))
 
-	// Resource management client is responsible for managing channels (create/update channel)
-	// Supply user that has privileges to create channel (in this case orderer admin)
-	resMgmtClient, err := resmgmt.New(clientContext)
-	if err != nil {
-		log.Print(err)
-	}*/
+		// Resource management client is responsible for managing channels (create/update channel)
+		// Supply user that has privileges to create channel (in this case orderer admin)
+		resMgmtClient, err := resmgmt.New(clientContext)
+		if err != nil {
+			log.Print(err)
+		}*/
 
 	//createChannel(sdk,resMgmtClient)
-
-
 
 	/*clientChannelContext := sdk.ChannelContext(channelName, fabsdk.WithUser(user))
 	ledgerClient, err := ledger.New(clientChannelContext)
@@ -298,14 +294,14 @@ func approveCC(ccID string, packageID string, orgResMgmt *resmgmt.Client) {
 	//ccPolicy, _ := policydsl.FromString("OR('Org1MSP.member')")
 	approveCCReq := resmgmt.LifecycleApproveCCRequest{
 
-		Name:              ccID,
-		Version:           "1",
-		PackageID:         packageID,
-		Sequence:          1,
-/*		EndorsementPlugin: "escc",
-		ValidationPlugin:  "vscc",
-		SignaturePolicy:   ccPolicy,*/
-		InitRequired:      true,
+		Name:      ccID,
+		Version:   "1",
+		PackageID: packageID,
+		Sequence:  1,
+		/*		EndorsementPlugin: "escc",
+				ValidationPlugin:  "vscc",
+				SignaturePolicy:   ccPolicy,*/
+		InitRequired: true,
 	}
 
 	txnID, err := orgResMgmt.LifecycleApproveCC(channelID, approveCCReq, resmgmt.WithTargetEndpoints(peer1), resmgmt.WithOrdererEndpoint("orderer.example.com"), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
@@ -349,13 +345,13 @@ func getInstalledCCPackage(packageID string, orgResMgmt *resmgmt.Client) []byte 
 func commitCC(orgResMgmt *resmgmt.Client) {
 	//ccPolicy, _ := policydsl.FromString("OR('Org2MSP.member')")
 	req := resmgmt.LifecycleCommitCCRequest{
-		Name:              cc,
-		Version:           "1",
-		Sequence:          1,
-/*		EndorsementPlugin: "escc",
-		ValidationPlugin:  "vscc",
-		SignaturePolicy:   ccPolicy,*/
-		InitRequired:      true,
+		Name:     cc,
+		Version:  "1",
+		Sequence: 1,
+		/*		EndorsementPlugin: "escc",
+				ValidationPlugin:  "vscc",
+				SignaturePolicy:   ccPolicy,*/
+		InitRequired: true,
 	}
 	txnID, err := orgResMgmt.LifecycleCommitCC(channelID, req, resmgmt.WithRetry(retry.DefaultResMgmtOpts),
 		resmgmt.WithTargetEndpoints(peer1),
@@ -365,8 +361,6 @@ func commitCC(orgResMgmt *resmgmt.Client) {
 	}
 	log.Print(txnID)
 }
-
-
 
 func createChannel(sdk *fabsdk.FabricSDK, resMgmtClient *resmgmt.Client) {
 	mspClient, err := mspclient.New(sdk.Context(), mspclient.WithOrg(orgName))
@@ -378,19 +372,64 @@ func createChannel(sdk *fabsdk.FabricSDK, resMgmtClient *resmgmt.Client) {
 		log.Print(err)
 	}
 	req := resmgmt.SaveChannelRequest{ChannelID: newChannelID,
-		ChannelConfigPath: filepath.Join(metadata.GetProjectPath(), metadata.ChannelConfigPath, newChannelID + ".tx"),
+		ChannelConfigPath: filepath.Join(metadata.GetProjectPath(), metadata.ChannelConfigPath, newChannelID+".tx"),
 		SigningIdentities: []pmsp.SigningIdentity{adminIdentity}}
 	txID, _ := resMgmtClient.SaveChannel(req, resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithOrdererEndpoint("orderer.example.com"))
 	log.Print(txID)
 
-
 }
 
-
-func joinChannel(orgResMgmt *resmgmt.Client){
+func joinChannel(orgResMgmt *resmgmt.Client) {
 
 	// Org peers join channel
 	if err := orgResMgmt.JoinChannel(newChannelID, resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithOrdererEndpoint("orderer.example.com")); err != nil {
 		fmt.Print(err)
 	}
+}
+
+func checkCCCommitReadiness(packageID string, orgResMgmt *resmgmt.Client) {
+	//ccPolicy := policydsl.SignedByAnyMember([]string{"Org1MSP"})
+	req := resmgmt.LifecycleCheckCCCommitReadinessRequest{
+		Name:      cc,
+		Version:   "0",
+		PackageID: packageID,
+		/*EndorsementPlugin: "escc",
+		ValidationPlugin:  "vscc",
+		SignaturePolicy:   ccPolicy,*/
+		Sequence:     1,
+		InitRequired: true,
+	}
+	resp, err := orgResMgmt.LifecycleCheckCCCommitReadiness(channelID, req, resmgmt.WithTargetEndpoints(peer1), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Print(resp)
+}
+
+func QueryConfigFromOrderer(channelID string, orgResMgmt *resmgmt.Client) {
+	resp, err := orgResMgmt.QueryConfigFromOrderer(channelID, resmgmt.WithOrdererEndpoint("orderer.example.com"))
+	if err != nil {
+		fmt.Print(err)
+	} else {
+		fmt.Print(resp)
+	}
+}
+func QueryInstantiatedChaincodes(channelID string, orgResMgmt *resmgmt.Client) {
+	resp, err := orgResMgmt.QueryInstantiatedChaincodes(channelID, resmgmt.WithTargetEndpoints(peer1))
+	if err != nil {
+		fmt.Print(err)
+	} else {
+		fmt.Print(resp)
+	}
+}
+
+func queryCommittedCC(orgResMgmt *resmgmt.Client) {
+	req := resmgmt.LifecycleQueryCommittedCCRequest{
+		Name: cc,
+	}
+	resp, err := orgResMgmt.LifecycleQueryCommittedCC(channelID, req, resmgmt.WithTargetEndpoints(peer1), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		fmt.Print(err)
+	}
+	fmt.Print(resp)
 }
