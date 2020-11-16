@@ -8,7 +8,6 @@ import (
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/resource"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
-	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/util/test"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/vendor/github.com/hyperledger/fabric-config/protolator"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/vendor/github.com/hyperledger/fabric-protos-go/common"
 	"github.com/golang/protobuf/proto"
@@ -31,7 +30,7 @@ func CreateDSClientCtx(configPath string, org, adminUser string) {
 	d.rsCl, _ = resmgmt.New(d.clCtx)
 }
 
-func getCurrentChannelConfig(ctx *dsClientCtx, orderer, channelID string) (*common.Config, error) {
+func GetCurrentChannelConfig(ctx *dsClientCtx, orderer, channelID string) (*common.Config, error) {
 	block, err := ctx.rsCl.QueryConfigBlockFromOrderer(channelID, resmgmt.WithOrdererEndpoint(orderer))
 	if err != nil {
 		return nil, err
@@ -39,8 +38,8 @@ func getCurrentChannelConfig(ctx *dsClientCtx, orderer, channelID string) (*comm
 	return resource.ExtractConfigFromBlock(block)
 }
 
-func signConfigUpdate(ctx *dsClientCtx, channelID string, proposedConfigJSON string) (*common.ConfigSignature, error) {
-	configUpdate, err := getConfigUpdate(ctx, channelID, proposedConfigJSON)
+func SignConfigUpdate(ctx *dsClientCtx, channelID string, proposedConfigJSON string) (*common.ConfigSignature, error) {
+	configUpdate, err := GetConfigUpdate(ctx, channelID, proposedConfigJSON)
 	if err != nil {
 		fmt.Errorf("getConfigUpdate returned error: %s", err)
 	}
@@ -58,14 +57,14 @@ func signConfigUpdate(ctx *dsClientCtx, channelID string, proposedConfigJSON str
 	return resource.CreateConfigSignature(org1Client, configUpdateBytes)
 }
 
-func getConfigUpdate(ctx *dsClientCtx, channelID string, proposedConfigJSON string) (*common.ConfigUpdate, error) {
+func GetConfigUpdate(ctx *dsClientCtx, channelID string, proposedConfigJSON string) (*common.ConfigUpdate, error) {
 
 	proposedConfig := &common.Config{}
 	err := protolator.DeepUnmarshalJSON(bytes.NewReader([]byte(proposedConfigJSON)), proposedConfig)
 	if err != nil {
 		return nil, err
 	}
-	channelConfig, err := getCurrentChannelConfig(ctx, "", channelID)
+	channelConfig, err := GetCurrentChannelConfig(ctx, "", channelID)
 	if err != nil {
 		return nil, err
 	}
@@ -111,10 +110,10 @@ func getConfigEnvelopeBytes(configUpdate *common.ConfigUpdate) ([]byte, error) {
 	return proto.Marshal(configEnvelope)
 }
 
-func E2eModifyChannel(ordererClCtx *dsClientCtx, ctx *dsClientCtx, org1ClCtx *dsClientCtx, channelID string) error {
+func E2eModifyChannel(ordererClCtx *dsClientCtx, org1ClCtx *dsClientCtx, channelID string) error {
 
 	// retrieve channel config
-	channelConfig, err := getCurrentChannelConfig(ctx, "", channelID)
+	channelConfig, err := GetCurrentChannelConfig(org1ClCtx, "", channelID)
 	if err != nil {
 		return err
 	}
@@ -122,13 +121,6 @@ func E2eModifyChannel(ordererClCtx *dsClientCtx, ctx *dsClientCtx, org1ClCtx *ds
 	// channel config is modified by adding a new application policy.
 	// This change must be signed by the majority of org admins.
 	// The modified config becomes the proposed channel config.
-	resourceCounter := +1
-	newACLPolicyName := fmt.Sprintf("my/new/resource/%d", resourceCounter)
-	newACLPolicy := "/Channel/Application/Admins"
-	err = test.AddACL(channelConfig, newACLPolicyName, newACLPolicy)
-	if err != nil {
-		fmt.Errorf("error modifying channel configuration: %s", err)
-	}
 
 	// proposed config is distributed to other orgs as JSON string for signing
 	var buf bytes.Buffer
@@ -138,12 +130,12 @@ func E2eModifyChannel(ordererClCtx *dsClientCtx, ctx *dsClientCtx, org1ClCtx *ds
 	proposedChannelConfigJSON := buf.String()
 
 	// org1 calculates and signs config update tx
-	signedConfigOrg1, err := signConfigUpdate(org1ClCtx, channelID, proposedChannelConfigJSON)
+	signedConfigOrg1, err := SignConfigUpdate(org1ClCtx, channelID, proposedChannelConfigJSON)
 	if err != nil {
 		fmt.Errorf("error getting signed configuration: %s", err)
 	}
 	// build config update envelope for constructing channel update request
-	configUpdate, err := getConfigUpdate(org1ClCtx, channelID, proposedChannelConfigJSON)
+	configUpdate, err := GetConfigUpdate(org1ClCtx, channelID, proposedChannelConfigJSON)
 	if err != nil {
 		fmt.Errorf("getConfigUpdate returned error: %s", err)
 	}
