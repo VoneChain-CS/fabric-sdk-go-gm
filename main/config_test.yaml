@@ -16,11 +16,12 @@ version: 1.0.0
 #
 # The client section used by GO SDK.
 #
+
 client:
 
   # Which organization does this application instance belong to? The value must be the name of an org
   # defined under "organizations"
-  organization: org1
+  organization: org3
 
   logging:
     level: info
@@ -40,7 +41,7 @@ client:
     # requiring a key store. PKCS#11 based implementations does not.
     cryptoStore:
       # Specific to the underlying KeyValueStore that backs the crypto key store.
-      path: /tmp/msp
+      path: /opt/goworkspace/src/github.com/VoneChain-CS/fabric-gm/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
 
     # BCCSP config for the client. Used by GO SDK.
   BCCSP:
@@ -272,6 +273,22 @@ organizations:
 
     certificateAuthorities:
       - ca.org2.example.com
+ # the profile will contain public information about organizations other than the one it belongs to.
+  # These are necessary information to make transaction lifecycles work, including MSP IDs and
+  # peers with a public URL to send transaction proposals. The file will not contain private
+  # information reserved for members of the organization, such as admin key and certificate,
+  # fabric-ca registrar enroll ID and secret, etc.
+  org3:
+    mspid: Org3MSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
+
+    peers:
+      - peer0.org3.example.com
+
+    certificateAuthorities:
+      - ca.org1.example.com
 
   # Orderer Org name
   ordererorg:
@@ -411,55 +428,3 @@ certificateAuthorities:
     caName: ca.org2.example.com
     #first one
 
-###############################################################################
-#
-#    Operations section
-#    copied from Fabric's core.yaml
-###############################################################################
-operations:
-  # host and port for the operations server
-  listenAddress: 127.0.0.1:8080
-
-  # TLS configuration for the operations endpoint
-  tls:
-    # TLS enabled
-    enabled: false
-
-    # path to PEM encoded server certificate for the operations server
-    cert:
-      file:
-
-    # path to PEM encoded server key for the operations server
-    key:
-      file:
-
-    # require client certificate authentication to access all resources
-    clientAuthRequired: false
-
-    # paths to PEM encoded ca certificates to trust for client authentication
-    clientRootCAs:
-      files: []
-
-###############################################################################
-#
-#    Metrics section
-#    copied from Fabric's core.yaml
-###############################################################################
-metrics:
-  # metrics provider is one of statsd, prometheus, or disabled
-  provider: prometheus
-
-  # statsd configuration
-  statsd:
-    # network type: tcp or udp
-    network: udp
-
-    # statsd server address
-    address: 127.0.0.1:8125
-
-    # the interval at which locally cached counters and gauges are pushed
-    # to statsd; timings are pushed immediately
-    writeInterval: 10s
-
-    # prefix is prepended to all emitted statsd metrics
-    prefix:
