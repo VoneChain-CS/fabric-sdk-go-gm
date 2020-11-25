@@ -494,6 +494,9 @@ func (c *Client) GetSigningIdentity(id string) (mspctx.SigningIdentity, error) {
 	}
 	return si, nil
 }
+func (c *Client) SetOrgName(orgName string) {
+	c.orgName = orgName
+}
 
 // CreateSigningIdentity creates a signing identity with the given options
 func (c *Client) CreateSigningIdentity(opts ...mspctx.SigningIdentityOption) (mspctx.SigningIdentity, error) {
