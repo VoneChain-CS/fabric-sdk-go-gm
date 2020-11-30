@@ -37,9 +37,9 @@ import (
 
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/core"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/csr"
 	factory "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric-ca/sdkpatch/cryptosuitebridge"
 	log "github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric-ca/sdkpatch/logbridge"
-	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/helpers"
 	"github.com/pkg/errors"
 )

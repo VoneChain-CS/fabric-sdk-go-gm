@@ -13,8 +13,8 @@ package api
 import (
 	"time"
 
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/cfssl/csr"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric-ca/sdkinternal/pkg/util"
-	"github.com/cloudflare/cfssl/csr"
 )
 
 // RegistrationRequest for a new identity
