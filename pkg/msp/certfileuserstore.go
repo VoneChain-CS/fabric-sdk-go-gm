@@ -21,7 +21,7 @@ type CertFileUserStore struct {
 }
 
 func storeKeyFromUserIdentifier(key msp.IdentityIdentifier) string {
-	return "Admin" + "@" + key.MSPID + "-cert.pem"
+	return key.ID + "@" + key.MSPID + "-cert.pem"
 }
 
 // NewCertFileUserStore1 creates a new instance of CertFileUserStore
