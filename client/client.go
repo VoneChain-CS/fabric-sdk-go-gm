@@ -4,9 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/common/channelconfig"
-	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/protoutil"
-	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/sdkinternal/configtxlator/update"
 	mspclient "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
@@ -18,8 +15,6 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-config/protolator"
 	"github.com/hyperledger/fabric-protos-go/common"
-	cb "github.com/hyperledger/fabric-protos-go/common"
-	"github.com/pkg/errors"
 	"io/ioutil"
 	"log"
 	"os"
@@ -289,26 +284,4 @@ func JoinChannel(newChannelID, orderer, orgName, configPath string) {
 	if err := orgResMgmt.JoinChannel(newChannelID, resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithOrdererEndpoint(orderer)); err != nil {
 		fmt.Print(err)
 	}
-}
-
-func CreateAnchorPeerUpdate(original *common.ConfigGroup, channelID, asOrg string, version uint64) (*common.ConfigUpdate, error) {
-
-	original.Groups[channelconfig.ApplicationGroupKey].Version = version
-	updated := proto.Clone(original).(*cb.ConfigGroup)
-
-	originalOrg, ok := original.Groups[channelconfig.ApplicationGroupKey].Groups[asOrg]
-	if !ok {
-		return nil, errors.Errorf("org with name '%s' does not exist in config", asOrg)
-	}
-	if _, ok = originalOrg.Values[channelconfig.AnchorPeersKey]; !ok {
-		return nil, errors.Errorf("org '%s' does not have any anchor peers defined", asOrg)
-	}
-	delete(originalOrg.Values, channelconfig.AnchorPeersKey)
-	updt, err := update.Compute(&cb.Config{ChannelGroup: original}, &cb.Config{ChannelGroup: updated})
-	if err != nil {
-		return nil, errors.WithMessage(err, "could not compute update")
-	}
-	updt.ChannelId = channelID
-	return updt, nil
-
 }

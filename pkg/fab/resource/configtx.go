@@ -10,7 +10,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-
 	"github.com/golang/protobuf/proto"
 
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/common/channelconfig"
@@ -175,5 +174,27 @@ func CreateAnchorPeersUpdate(conf *genesisconfig.Profile, channelID string, asOr
 	}
 
 	return protoutil.CreateSignedEnvelope(cb.HeaderType_CONFIG_UPDATE, channelID, nil, newConfigUpdateEnv, 0, 0)
+
+}
+
+func CreateAnchorPeerUpdate(original *cb.ConfigGroup, channelID, asOrg string, version uint64) (*common.ConfigUpdate, error) {
+
+	original.Groups[channelconfig.ApplicationGroupKey].Version = version
+	updated := proto.Clone(original).(*common.ConfigGroup)
+
+	originalOrg, ok := original.Groups[channelconfig.ApplicationGroupKey].Groups[asOrg]
+	if !ok {
+		return nil, errors.Errorf("org with name '%s' does not exist in config", asOrg)
+	}
+	if _, ok = originalOrg.Values[channelconfig.AnchorPeersKey]; !ok {
+		return nil, errors.Errorf("org '%s' does not have any anchor peers defined", asOrg)
+	}
+	delete(originalOrg.Values, channelconfig.AnchorPeersKey)
+	updt, err := update.Compute(&common.Config{ChannelGroup: original}, &common.Config{ChannelGroup: updated})
+	if err != nil {
+		return nil, errors.WithMessage(err, "could not compute update")
+	}
+	updt.ChannelId = channelID
+	return updt, nil
 
 }
