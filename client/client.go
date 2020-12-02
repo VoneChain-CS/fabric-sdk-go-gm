@@ -291,16 +291,8 @@ func JoinChannel(newChannelID, orderer, orgName, configPath string) {
 	}
 }
 
-func CreateAnchorPeerUpdate(client *resmgmt.Client, channelID, anchorPath, asOrg string) (*common.Envelope, error) {
-	mspAnchor, _ := ioutil.ReadFile(anchorPath)
-	//result,_:=resource.InspectChannelCreateTx(mspAnchor)
-	result, _ := resource.ExtractChannelConfig(mspAnchor)
-	envelope := &cb.ConfigUpdate{}
-	proto.Unmarshal(result, envelope)
-	//result2,_:=resource.InspectChannelCreateTx(mspAnchor)
-	chconf, _ := client.QueryConfigFromOrderer(channelID)
-	original := envelope.WriteSet
-	version := chconf.Versions().Channel.Groups[channelconfig.ApplicationGroupKey].Version
+func CreateAnchorPeerUpdate(original *common.ConfigGroup, channelID, asOrg string, version uint64) (*common.ConfigUpdate, error) {
+
 	original.Groups[channelconfig.ApplicationGroupKey].Version = version
 	updated := proto.Clone(original).(*cb.ConfigGroup)
 
@@ -317,9 +309,6 @@ func CreateAnchorPeerUpdate(client *resmgmt.Client, channelID, anchorPath, asOrg
 		return nil, errors.WithMessage(err, "could not compute update")
 	}
 	updt.ChannelId = channelID
-	newConfigUpdateEnv := &cb.ConfigUpdateEnvelope{
-		ConfigUpdate: protoutil.MarshalOrPanic(updt),
-	}
-	return protoutil.CreateSignedEnvelope(cb.HeaderType_CONFIG_UPDATE, channelID, nil, newConfigUpdateEnv, 0, 0)
+	return updt, nil
 
 }
