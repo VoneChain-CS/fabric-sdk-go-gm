@@ -4,18 +4,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/common/channelconfig"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/protoutil"
+	"github.com/VoneChain-CS/fabric-sdk-go-gm/internal/github.com/hyperledger/fabric/sdkinternal/configtxlator/update"
 	mspclient "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/msp"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/client/resmgmt"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/retry"
-	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/errors/status"
-	contextAPI "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
 	contextApi "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/context"
-	fabAPI "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/fab"
 	pmsp "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/common/providers/msp"
-	contextImpl "github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/context"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/core/config"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fab/resource"
 	"github.com/VoneChain-CS/fabric-sdk-go-gm/pkg/fabsdk"
+	cb "github.com/VoneChain-CS/fabric-sdk-go-gm/vendor/github.com/hyperledger/fabric-protos-go/common"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-config/protolator"
 	"github.com/hyperledger/fabric-protos-go/common"
@@ -268,51 +268,6 @@ func IsJoin(channelID, configPath, orgName, peer string) {
 
 }
 
-//发现本地peers
-// DiscoverLocalPeers queries the local peers for the given MSP context and returns all of the peers. If
-// the number of peers does not match the expected number then an error is returned.
-func DiscoverLocalPeers(ctxProvider contextAPI.ClientProvider, expectedPeers int) ([]fabAPI.Peer, error) {
-	ctx, err := contextImpl.NewLocal(ctxProvider)
-	if err != nil {
-		return nil, errors.Wrap(err, "error creating local context")
-	}
-
-	discoveredPeers, err := retry.NewInvoker(retry.New(retry.TestRetryOpts)).Invoke(
-		func() (interface{}, error) {
-			peers, serviceErr := ctx.LocalDiscoveryService().GetPeers()
-			if serviceErr != nil {
-				return nil, errors.Wrapf(serviceErr, "error getting peers for MSP [%s]", ctx.Identifier().MSPID)
-			}
-			if len(peers) < expectedPeers {
-				return nil, status.New(status.TestStatus, status.GenericTransient.ToInt32(), fmt.Sprintf("Expecting %d peers but got %d", expectedPeers, len(peers)), nil)
-			}
-			return peers, nil
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	return discoveredPeers.([]fabAPI.Peer), nil
-}
-
-/*func createOrderDsClientCtx(ordererOrgName ,adminUser string) *dsClientCtx {
-	sdk, _ := fabsdk.WithOrg()
-
-
-	ordererCtx := sdk.Context(fabsdk.WithUser(adminUser), fabsdk.WithOrg(ordererOrgName))
-
-	// create Channel management client for OrdererOrg
-	chMgmtClient, _ := resmgmt.New(ordererCtx)
-
-	return &dsClientCtx{
-		org:   ordererOrgName,
-		sdk:   sdk,
-		clCtx: ordererCtx,
-		rsCl:  chMgmtClient,
-	}
-}*/
-
 func JoinChannel(newChannelID, orderer, orgName, configPath string) {
 
 	sdk, err := fabsdk.New(config.FromFile(configPath))
@@ -334,4 +289,37 @@ func JoinChannel(newChannelID, orderer, orgName, configPath string) {
 	if err := orgResMgmt.JoinChannel(newChannelID, resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithOrdererEndpoint(orderer)); err != nil {
 		fmt.Print(err)
 	}
+}
+
+func CreateAnchorPeerUpdate(client *resmgmt.Client, channelID, anchorPath, asOrg string) (*common.Envelope, error) {
+	mspAnchor, _ := ioutil.ReadFile(anchorPath)
+	//result,_:=resource.InspectChannelCreateTx(mspAnchor)
+	result, _ := resource.ExtractChannelConfig(mspAnchor)
+	envelope := &cb.ConfigUpdate{}
+	proto.Unmarshal(result, envelope)
+	//result2,_:=resource.InspectChannelCreateTx(mspAnchor)
+	chconf, _ := client.QueryConfigFromOrderer(channelID)
+	original := envelope.WriteSet
+	version := chconf.Versions().Channel.Groups[channelconfig.ApplicationGroupKey].Version
+	original.Groups[channelconfig.ApplicationGroupKey].Version = version
+	updated := proto.Clone(original).(*cb.ConfigGroup)
+
+	originalOrg, ok := original.Groups[channelconfig.ApplicationGroupKey].Groups[asOrg]
+	if !ok {
+		return nil, errors.Errorf("org with name '%s' does not exist in config", asOrg)
+	}
+	if _, ok = originalOrg.Values[channelconfig.AnchorPeersKey]; !ok {
+		return nil, errors.Errorf("org '%s' does not have any anchor peers defined", asOrg)
+	}
+	delete(originalOrg.Values, channelconfig.AnchorPeersKey)
+	updt, err := update.Compute(&cb.Config{ChannelGroup: original}, &cb.Config{ChannelGroup: updated})
+	if err != nil {
+		return nil, errors.WithMessage(err, "could not compute update")
+	}
+	updt.ChannelId = channelID
+	newConfigUpdateEnv := &cb.ConfigUpdateEnvelope{
+		ConfigUpdate: protoutil.MarshalOrPanic(updt),
+	}
+	return protoutil.CreateSignedEnvelope(cb.HeaderType_CONFIG_UPDATE, channelID, nil, newConfigUpdateEnv, 0, 0)
+
 }
