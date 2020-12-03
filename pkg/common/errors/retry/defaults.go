@@ -21,7 +21,7 @@ const (
 	// DefaultInitialBackoff default initial backoff
 	DefaultInitialBackoff = 500 * time.Millisecond
 	// DefaultMaxBackoff default maximum backoff
-	DefaultMaxBackoff = 60 * time.Second
+	DefaultMaxBackoff = 150 * time.Second
 	// DefaultBackoffFactor default backoff factor
 	DefaultBackoffFactor = 2.0
 )
@@ -29,11 +29,11 @@ const (
 // Resource Management Suggested Defaults
 const (
 	// ResMgmtDefaultAttempts number of retry attempts made by default
-	ResMgmtDefaultAttempts = 5
+	ResMgmtDefaultAttempts = 2
 	// ResMgmtDefaultInitialBackoff default initial backoff
 	ResMgmtDefaultInitialBackoff = time.Second
 	// ResMgmtDefaultMaxBackoff default maximum backoff
-	ResMgmtDefaultMaxBackoff = 60 * time.Second
+	ResMgmtDefaultMaxBackoff = 150 * time.Second
 	// ResMgmtDefaultBackoffFactor default backoff factor
 	ResMgmtDefaultBackoffFactor = 2.5
 )
