@@ -315,6 +315,12 @@ func checkTimeStarted(r *Reference, initialExpiration time.Duration) {
 					logger.Debugf("Not expired yet. Will check again in %s", expiry)
 				}
 			}
+		// time: 2022/1/7
+		// problem: The query block configuration failed due to the abnormal shutdown of the node, 
+		// 			but it still keeps retrying
+		case <-time.After(10*time.Minute):
+			logger.Warn("retry timeout.checkTimeStarted goroutines will close!")
+			return
 		}
 	}
 }
