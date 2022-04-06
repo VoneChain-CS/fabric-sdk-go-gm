@@ -18,6 +18,8 @@ const (
 	lscc                    = "lscc"
 	lsccInstall             = "install"
 	lsccInstalledChaincodes = "getinstalledchaincodes"
+	lsccBathCall            = "batchcall"
+	lsccUninsatll           = "uninstall"
 )
 
 // ChaincodeInstallRequest requests chaincode installation on the network
@@ -64,6 +66,25 @@ func createInstallInvokeRequest(request ChaincodeInstallRequest) (fab.ChaincodeI
 		Args:        args,
 	}
 	return cir, nil
+}
+
+func createUninstallInvokeRequest(packageID string) fab.ChaincodeInvokeRequest {
+	args := [][]byte{[]byte(packageID)}
+	cir := fab.ChaincodeInvokeRequest{
+		ChaincodeID: lscc,
+		Fcn:         lsccUninsatll,
+		Args:        args,
+	}
+	return cir
+}
+
+func createBathCallInvokeRequest(args [][]byte) fab.ChaincodeInvokeRequest {
+	cir := fab.ChaincodeInvokeRequest{
+		ChaincodeID: lscc,
+		Fcn:         lsccBathCall,
+		Args:        args,
+	}
+	return cir
 }
 
 func createInstalledChaincodesInvokeRequest() fab.ChaincodeInvokeRequest {

@@ -529,6 +529,38 @@ func (rc *Client) UpgradeCC(channelID string, req UpgradeCCRequest, options ...R
 	return UpgradeCCResponse{TransactionID: txID}, err
 }
 
+// Uninstall
+// 卸载链码
+func (rc *Client) Uninstall(packageID string, options ...RequestOption) (*pb.ChaincodeQueryResponse, error) {
+	opts, err := rc.prepareRequestOpts(options...)
+	if err != nil {
+		return nil, err
+	}
+	if len(opts.Targets) != 1 {
+		return nil, errors.New("only one target is supported")
+	}
+
+	reqCtx, cancel := rc.createRequestContext(opts, fab.PeerResponse)
+	defer cancel()
+	return resource.UninstallChaincode(reqCtx, packageID, opts.Targets[0], resource.WithRetry(opts.Retry))
+}
+
+// QueryBatchCall
+// 批量调用链码
+func (rc *Client) QueryBatchCall(channel string, args [][]byte, options ...RequestOption) (*pb.ChaincodeQueryResponse, error) {
+	opts, err := rc.prepareRequestOpts(options...)
+	if err != nil {
+		return nil, err
+	}
+	if len(opts.Targets) != 1 {
+		return nil, errors.New("only one target is supported")
+	}
+
+	reqCtx, cancel := rc.createRequestContext(opts, fab.PeerResponse)
+	defer cancel()
+	return resource.QueryBathCallChaincode(reqCtx, channel, args, opts.Targets[0], resource.WithRetry(opts.Retry))
+}
+
 // QueryInstalledChaincodes queries the installed chaincodes on a peer.
 //  Parameters:
 //  options hold optional request options

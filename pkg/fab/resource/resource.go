@@ -290,6 +290,52 @@ func QueryChannels(reqCtx reqContext.Context, peer fab.ProposalProcessor, opts .
 	return response, nil
 }
 
+func UninstallChaincode(reqCtx reqContext.Context, packageID string, peer fab.ProposalProcessor, opts ...Opt) (*pb.ChaincodeQueryResponse, error) {
+	if peer == nil {
+		return nil, errors.New("peer required")
+	}
+
+	optionsValue := getOpts(opts...)
+
+	cir := createUninstallInvokeRequest(packageID)
+
+	payload, err := uninstallChaincodeWithTarget(reqCtx, cir, peer, optionsValue)
+	if err != nil {
+		return nil, errors.WithMessage(err, "lscc.batchcall failed")
+	}
+
+	response := new(pb.ChaincodeQueryResponse)
+	err = proto.Unmarshal(payload, response)
+	if err != nil {
+		return nil, errors.Wrap(err, "unmarshal ChaincodeQueryResponse failed")
+	}
+
+	return response, nil
+}
+
+func QueryBathCallChaincode(reqCtx reqContext.Context, channel string, args [][]byte, peer fab.ProposalProcessor, opts ...Opt) (*pb.ChaincodeQueryResponse, error) {
+	if peer == nil {
+		return nil, errors.New("peer required")
+	}
+
+	optionsValue := getOpts(opts...)
+
+	cir := createBathCallInvokeRequest(args)
+
+	payload, err := batchcallChaincodeWithTarget(reqCtx, channel, cir, peer, optionsValue)
+	if err != nil {
+		return nil, errors.WithMessage(err, "lscc.batchcall failed")
+	}
+
+	response := new(pb.ChaincodeQueryResponse)
+	err = proto.Unmarshal(payload, response)
+	if err != nil {
+		return nil, errors.Wrap(err, "unmarshal ChaincodeQueryResponse failed")
+	}
+
+	return response, nil
+}
+
 // QueryInstalledChaincodes queries the installed chaincodes on a peer.
 // Returns the details of all chaincodes installed on a peer.
 func QueryInstalledChaincodes(reqCtx reqContext.Context, peer fab.ProposalProcessor, opts ...Opt) (*pb.ChaincodeQueryResponse, error) {
@@ -368,6 +414,80 @@ func InstallChaincode(reqCtx reqContext.Context, req InstallChaincodeRequest, ta
 	}
 
 	return resp.([]*fab.TransactionProposalResponse), prop.TxnID, nil
+}
+
+func uninstallChaincodeWithTarget(reqCtx reqContext.Context, request fab.ChaincodeInvokeRequest, target fab.ProposalProcessor, opts options) ([]byte, error) {
+
+	targets := []fab.ProposalProcessor{target}
+
+	ctx, ok := contextImpl.RequestClientContext(reqCtx)
+	if !ok {
+		return nil, errors.New("failed get client context from reqContext for txn header")
+	}
+
+	txh, err := txn.NewHeader(ctx, fab.SystemChannel)
+	if err != nil {
+		return nil, errors.WithMessage(err, "create transaction ID failed")
+	}
+
+	tp, err := txn.CreateChaincodeInvokeProposal(txh, request)
+	if err != nil {
+		return nil, errors.WithMessage(err, "NewProposal failed")
+	}
+
+	resp, err := retry.NewInvoker(retry.New(opts.retry)).Invoke(
+		func() (interface{}, error) {
+			return txn.SendProposal(reqCtx, tp, targets)
+		},
+	)
+	if err != nil {
+		return nil, errors.WithMessage(err, "SendProposal failed")
+	}
+
+	tpr := resp.([]*fab.TransactionProposalResponse)
+	err = validateResponse(tpr[0])
+	if err != nil {
+		return nil, errors.WithMessage(err, "transaction proposal failed")
+	}
+
+	return tpr[0].ProposalResponse.GetResponse().Payload, nil
+}
+
+func batchcallChaincodeWithTarget(reqCtx reqContext.Context, channel string, request fab.ChaincodeInvokeRequest, target fab.ProposalProcessor, opts options) ([]byte, error) {
+
+	targets := []fab.ProposalProcessor{target}
+
+	ctx, ok := contextImpl.RequestClientContext(reqCtx)
+	if !ok {
+		return nil, errors.New("failed get client context from reqContext for txn header")
+	}
+
+	txh, err := txn.NewHeader(ctx, channel)
+	if err != nil {
+		return nil, errors.WithMessage(err, "create transaction ID failed")
+	}
+
+	tp, err := txn.CreateChaincodeInvokeProposal(txh, request)
+	if err != nil {
+		return nil, errors.WithMessage(err, "NewProposal failed")
+	}
+
+	resp, err := retry.NewInvoker(retry.New(opts.retry)).Invoke(
+		func() (interface{}, error) {
+			return txn.SendProposal(reqCtx, tp, targets)
+		},
+	)
+	if err != nil {
+		return nil, errors.WithMessage(err, "SendProposal failed")
+	}
+
+	tpr := resp.([]*fab.TransactionProposalResponse)
+	err = validateResponse(tpr[0])
+	if err != nil {
+		return nil, errors.WithMessage(err, "transaction proposal failed")
+	}
+
+	return tpr[0].ProposalResponse.GetResponse().Payload, nil
 }
 
 func queryChaincodeWithTarget(reqCtx reqContext.Context, request fab.ChaincodeInvokeRequest, target fab.ProposalProcessor, opts options) ([]byte, error) {
