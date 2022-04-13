@@ -30,6 +30,7 @@ const (
 	lifecycleGetInstalledChaincodePackageFunc = "GetInstalledChaincodePackage"
 	lifecycleApproveChaincodeFuncName         = "ApproveChaincodeDefinitionForMyOrg"
 	lifecycleQueryApprovedCCDefinitionFunc    = "QueryApprovedChaincodeDefinition"
+	lifecycleUninstalledChaincodeFunc         = "UninstalledChaincode"
 	lifecycleCheckCommitReadinessFuncName     = "CheckCommitReadiness"
 	lifecycleCommitFuncName                   = "CommitChaincodeDefinition"
 	lifecycleQueryChaincodeDefinitionFunc     = "QueryChaincodeDefinition"
@@ -208,6 +209,51 @@ func (lc *Lifecycle) QueryInstalled(reqCtx reqContext.Context, target fab.Propos
 	}, nil
 }
 
+// QueryInstalled returns information about the installed chaincodes on a given peer.
+func (lc *Lifecycle) Uninstalled(packageID string, reqCtx reqContext.Context, target fab.ProposalProcessor, opts ...Opt) (*LifecycleUninstalledCCResponse, error) {
+	ctx, ok := lc.newContext(reqCtx)
+	if !ok {
+		return nil, errors.New("failed get client context from reqContext for txn header")
+	}
+
+	txh, err := lc.newTxnHeader(ctx, fab.SystemChannel)
+	if err != nil {
+		return nil, errors.WithMessage(err, "create transaction ID failed")
+	}
+
+	prop, err := lc.createUninstalledProposal(packageID, txh)
+	if err != nil {
+		return nil, errors.WithMessage(err, "creation of query installed chaincodes proposal failed")
+	}
+
+	optionsValue := getOpts(opts...)
+
+	resp, err := retry.NewInvoker(retry.New(optionsValue.retry)).Invoke(
+		func() (interface{}, error) {
+			return txn.SendProposal(reqCtx, prop, []fab.ProposalProcessor{target})
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	tpResponses := resp.([]*fab.TransactionProposalResponse)
+
+	r := tpResponses[0]
+	logger.Debugf("Query installed chaincodes endorser '%s' returned ProposalResponse status:%v", r.Endorser, r.Status)
+
+	qicr := &lb.QueryInstalledChaincodeResult{}
+	err = lc.protoUnmarshal(r.Response.Payload, qicr)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to unmarshal proposal response's response payload")
+	}
+
+	return &LifecycleUninstalledCCResponse{
+		TransactionProposalResponse: r,
+		UninstalledChaincode:        toUninstalledChaincode(qicr),
+	}, nil
+}
+
 // GetInstalledPackage returns the installed chaincode package for the given package ID
 func (lc *Lifecycle) GetInstalledPackage(reqCtx reqContext.Context, packageID string, target fab.ProposalProcessor, opts ...Opt) ([]byte, error) {
 	ctx, ok := lc.newContext(reqCtx)
@@ -340,6 +386,23 @@ func (lc *Lifecycle) createQueryInstalledProposal(txh fab.TransactionHeader) (*f
 		fab.ChaincodeInvokeRequest{
 			ChaincodeID: lifecycleCC,
 			Fcn:         lifecycleQueryInstalledChaincodesFunc,
+			Args:        [][]byte{argsBytes},
+		},
+	)
+}
+
+func (lc *Lifecycle) createUninstalledProposal(packageID string, txh fab.TransactionHeader) (*fab.TransactionProposal, error) {
+	args := &lb.QueryInstalledChaincodeArgs{PackageId: packageID}
+
+	argsBytes, err := lc.protoMarshal(args)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to marshal InstallChaincodeArgs")
+	}
+
+	return txn.CreateChaincodeInvokeProposal(txh,
+		fab.ChaincodeInvokeRequest{
+			ChaincodeID: lifecycleCC,
+			Fcn:         lifecycleUninstalledChaincodeFunc,
 			Args:        [][]byte{argsBytes},
 		},
 	)
@@ -636,6 +699,28 @@ func toInstalledChaincodes(installedChaincodes []*lb.QueryInstalledChaincodesRes
 			Label:      ic.Label,
 			References: refsByChannelID,
 		}
+	}
+
+	return result
+}
+
+func toUninstalledChaincode(uninstalledChaincode *lb.QueryInstalledChaincodeResult) *LifecycleInstalledCC {
+	refsByChannelID := make(map[string][]CCReference)
+	for channelID, chaincodes := range uninstalledChaincode.References {
+		refs := make([]CCReference, len(chaincodes.Chaincodes))
+		for j, cc := range chaincodes.Chaincodes {
+			refs[j] = CCReference{
+				Name:    cc.Name,
+				Version: cc.Version,
+			}
+		}
+
+		refsByChannelID[channelID] = refs
+	}
+	result := &LifecycleInstalledCC{
+		PackageID:  uninstalledChaincode.PackageId,
+		Label:      uninstalledChaincode.Label,
+		References: refsByChannelID,
 	}
 
 	return result

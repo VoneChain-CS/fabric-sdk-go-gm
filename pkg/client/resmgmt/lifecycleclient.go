@@ -48,6 +48,12 @@ type LifecycleInstalledCC struct {
 	References map[string][]CCReference
 }
 
+type LifecycleUninstalledCC struct {
+	PackageID  string                   `json:"packageID,omitempty"`
+	Label      string                   `json:"label,omitempty"`
+	References map[string][]CCReference `json:"references,omitempty"`
+}
+
 // LifecycleApproveCCRequest contains the parameters for approving a chaincode for an org.
 type LifecycleApproveCCRequest struct {
 	Name                string
@@ -216,6 +222,40 @@ func (rc *Client) LifecycleQueryInstalledCC(options ...RequestOption) ([]Lifecyc
 	defer cancel()
 
 	responses, err := rc.lifecycleProcessor.queryInstalled(reqCtx, opts.Targets[0])
+
+	var errs multi.Errors
+	if err != nil {
+		installErrs, ok := err.(multi.Errors)
+		if ok {
+			errs = append(errs, installErrs)
+		} else {
+			errs = append(errs, err)
+		}
+	}
+
+	return responses, errs.ToError()
+}
+
+func (rc *Client) LifecycleUninstalledCC(packageID string, options ...RequestOption) (*LifecycleUninstalledCC, error) {
+	opts, err := rc.prepareRequestOpts(options...)
+	if err != nil {
+		return nil, errors.WithMessage(err, "failed to get opts for QueryInstalledCC")
+	}
+
+	if len(opts.Targets) != 1 {
+		return nil, errors.New("only one target is supported")
+	}
+
+	rc.resolveTimeouts(&opts)
+
+	parentReqCtx, parentReqCancel := contextImpl.NewRequest(rc.ctx, contextImpl.WithTimeout(opts.Timeouts[fab.ResMgmt]), contextImpl.WithParent(opts.ParentContext))
+	parentReqCtx = reqContext.WithValue(parentReqCtx, contextImpl.ReqContextTimeoutOverrides, opts.Timeouts)
+	defer parentReqCancel()
+
+	reqCtx, cancel := contextImpl.NewRequest(rc.ctx, contextImpl.WithTimeoutType(fab.ResMgmt), contextImpl.WithParent(parentReqCtx))
+	defer cancel()
+
+	responses, err := rc.lifecycleProcessor.uninstalled(packageID, reqCtx, opts.Targets[0])
 
 	var errs multi.Errors
 	if err != nil {

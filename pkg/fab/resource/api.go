@@ -87,6 +87,11 @@ type LifecycleQueryInstalledCCResponse struct {
 	InstalledChaincodes []LifecycleInstalledCC
 }
 
+type LifecycleUninstalledCCResponse struct {
+	*fab.TransactionProposalResponse
+	UninstalledChaincode *LifecycleInstalledCC
+}
+
 // LifecycleQueryApprovedCCResponse contains the response for a LifecycleQueryApprovedCC request
 type LifecycleQueryApprovedCCResponse struct {
 	*fab.TransactionProposalResponse

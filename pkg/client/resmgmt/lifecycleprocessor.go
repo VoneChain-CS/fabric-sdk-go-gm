@@ -36,6 +36,7 @@ import (
 type lifecycleResource interface {
 	Install(reqCtx reqContext.Context, installPkg []byte, targets []fab.ProposalProcessor, opts ...resource.Opt) ([]*resource.LifecycleInstallProposalResponse, error)
 	GetInstalledPackage(reqCtx reqContext.Context, packageID string, target fab.ProposalProcessor, opts ...resource.Opt) ([]byte, error)
+	Uninstalled(packageID string, reqCtx reqContext.Context, target fab.ProposalProcessor, opts ...resource.Opt) (*resource.LifecycleUninstalledCCResponse, error)
 	QueryInstalled(reqCtx reqContext.Context, target fab.ProposalProcessor, opts ...resource.Opt) (*resource.LifecycleQueryInstalledCCResponse, error)
 	QueryApproved(reqCtx reqContext.Context, channelID string, req *resource.QueryApprovedChaincodeRequest, target fab.ProposalProcessor, opts ...resource.Opt) (*resource.LifecycleQueryApprovedCCResponse, error)
 	CreateApproveProposal(txh fab.TransactionHeader, req *resource.ApproveChaincodeRequest) (*fab.TransactionProposal, error)
@@ -100,6 +101,17 @@ func (p *lifecycleProcessor) queryInstalled(reqCtx reqContext.Context, target fa
 	logger.Debugf("Query installed chaincodes endorser '%s' returned ProposalResponse status:%v", r.Endorser, r.Status)
 
 	return p.toInstalledChaincodes(r.InstalledChaincodes), nil
+}
+
+func (p *lifecycleProcessor) uninstalled(packageID string, reqCtx reqContext.Context, target fab.Peer) (*LifecycleUninstalledCC, error) {
+	r, err := p.Uninstalled(packageID, reqCtx, target)
+	if err != nil {
+		return nil, errors.WithMessage(err, "querying for installed chaincodes failed")
+	}
+
+	logger.Debugf("Query installed chaincodes endorser '%s' returned ProposalResponse status:%v", r.Endorser, r.Status)
+
+	return p.toUninstalledChaincode(r.UninstalledChaincode), nil
 }
 
 func (p *lifecycleProcessor) approve(reqCtx reqContext.Context, channelID string, req LifecycleApproveCCRequest, opts requestOptions) (fab.TransactionID, error) {
@@ -440,6 +452,28 @@ func (p *lifecycleProcessor) isInstalled(reqCtx reqContext.Context, req Lifecycl
 	logger.Debugf("Chaincode package [%s] has already been installed", packageID)
 
 	return true, nil
+}
+
+func (p *lifecycleProcessor) toUninstalledChaincode(uninstalledChaincode *resource.LifecycleInstalledCC) *LifecycleUninstalledCC {
+	refsByChannelID := make(map[string][]CCReference)
+	for channelID, chaincodes := range uninstalledChaincode.References {
+		refs := make([]CCReference, len(chaincodes))
+		for j, cc := range chaincodes {
+			refs[j] = CCReference{
+				Name:    cc.Name,
+				Version: cc.Version,
+			}
+		}
+
+		refsByChannelID[channelID] = refs
+	}
+	ccs := &LifecycleUninstalledCC{
+		PackageID:  uninstalledChaincode.PackageID,
+		Label:      uninstalledChaincode.Label,
+		References: refsByChannelID,
+	}
+
+	return ccs
 }
 
 func (p *lifecycleProcessor) toInstalledChaincodes(installedChaincodes []resource.LifecycleInstalledCC) []LifecycleInstalledCC {
